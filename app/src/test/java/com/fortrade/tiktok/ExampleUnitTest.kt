@@ -1,4 +1,4 @@
-package com.leeladher.tiktok
+package com.fortrade.tiktok
 
 import org.junit.Test
 

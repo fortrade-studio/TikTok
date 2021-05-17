@@ -1,4 +1,4 @@
-package com.leeladher.tiktok
+package com.fortrade.tiktok
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

@@ -1,4 +1,4 @@
-package com.leeladher.tiktok
+package com.fortrade.tiktok
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
