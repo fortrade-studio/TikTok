@@ -6,37 +6,46 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.provider.MediaStore
 import android.util.Log
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.RadioButton
 import android.widget.Toast
-import androidx.core.view.isInvisible
-import androidx.core.view.isVisible
+import androidx.appcompat.app.AppCompatActivity
 import com.fortrade.tiktok.MainActivity
-import com.fortrade.tiktok.databinding.ActivityUpdateProfileBinding
+import com.fortrade.tiktok.databinding.FragmentUpdateProfileBinding
 import com.fortrade.tiktok.model.UserProfileData
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import java.util.*
 
-class UpdateProfileActivity : AppCompatActivity() {
-
+class UpdateProfileFragment : Fragment() {
     companion object {
         private const val TAG = "MainActivity"
     }
-    private lateinit var progressDialog: ProgressDialog
-    private var mDateSetListener: DatePickerDialog.OnDateSetListener? = null
-    private lateinit var binding: ActivityUpdateProfileBinding
     private lateinit var BirthDay: String
     var valid = true
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityUpdateProfileBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        progressDialog = ProgressDialog(this)
+    private lateinit var progressDialog: ProgressDialog
+    private var mDateSetListener: DatePickerDialog.OnDateSetListener? = null
+
+    private var _binding: FragmentUpdateProfileBinding? = null
+    private val binding get() = _binding!!
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        _binding = FragmentUpdateProfileBinding.inflate(inflater, container, false)
+
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        progressDialog = ProgressDialog(context)
         progressDialog.setTitle("Please Wait")
         progressDialog.setCanceledOnTouchOutside(false)
         binding.date!!.setOnClickListener {
@@ -44,16 +53,17 @@ class UpdateProfileActivity : AppCompatActivity() {
             val year = cal[Calendar.YEAR]
             val month = cal[Calendar.MONTH]
             val day = cal[Calendar.DAY_OF_MONTH]
-            val dialog = DatePickerDialog(
-                this,
-                android.R.style.Theme_Holo_Light_Dialog_MinWidth,
-                mDateSetListener,
-                year, month, day
-            )
-            dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            val dialog = context?.let { it1 ->
+                DatePickerDialog(
+                    it1,
+                    android.R.style.Theme_Holo_Light_Dialog_MinWidth,
+                    mDateSetListener,
+                    year, month, day
+                )
+            }
+            dialog?.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             dialog.show()
         }
-
         mDateSetListener = DatePickerDialog.OnDateSetListener { datePicker, year, month, day ->
             var month = month
             month = month + 1
@@ -74,27 +84,26 @@ class UpdateProfileActivity : AppCompatActivity() {
 
             uploadImageToFirebaseStorage()
         }
-
     }
 
     private fun uploadImageToFirebaseStorage() {
         if (selectedProfileUri == null) {
             progressDialog.dismiss()
             Toast.makeText(
-                this@UpdateProfileActivity,
+                context,
                 "Please Select Image",
                 Toast.LENGTH_LONG
             ).show()
 
             return
         }
-            progressDialog.show()
+        progressDialog.show()
         val filename = UUID.randomUUID().toString()
         val ref = FirebaseStorage.getInstance().getReference("/images/$filename")
         ref.putFile(selectedProfileUri!!)
             .addOnSuccessListener {
                 Toast.makeText(
-                    this@UpdateProfileActivity,
+                    context,
                     "Successfully upload",
                     Toast.LENGTH_SHORT
                 ).show()
@@ -109,7 +118,7 @@ class UpdateProfileActivity : AppCompatActivity() {
 
     private fun saveUserProfileData(ProfileImageUrl: String) {
 
-        val radio: RadioButton = findViewById(binding.gender.checkedRadioButtonId)
+        val radio: RadioButton? = view?.findViewById(binding.gender.checkedRadioButtonId)
 
         val fullName = binding.name.editableText.toString()
         val username = binding.userName.editableText.toString()
@@ -117,7 +126,7 @@ class UpdateProfileActivity : AppCompatActivity() {
         val phoneNumber = binding.phone.editableText.toString()
         val Bio = binding.bio.editableText.toString()
         val website = binding.website.editableText.toString()
-        val gender ="${radio.text}"
+        val gender ="${radio?.text}"
 
         checkField(binding.name)
         checkField(binding.userName)
@@ -126,21 +135,21 @@ class UpdateProfileActivity : AppCompatActivity() {
         checkField(binding.bio)
 
         if (valid){
-        val ref = FirebaseDatabase.getInstance().getReference("userProfileData").push()
+            val ref = FirebaseDatabase.getInstance().getReference("userProfileData").push()
 
-        val user =UserProfileData(fullName, username, emailId, phoneNumber, Bio, website, gender,BirthDay,ProfileImageUrl)
+            val user = UserProfileData(fullName, username, emailId, phoneNumber, Bio, website, gender,BirthDay,ProfileImageUrl)
 
-        ref.setValue(user)
-            .addOnSuccessListener {
-                progressDialog.dismiss()
-                Toast.makeText(this@UpdateProfileActivity, "UploadData", Toast.LENGTH_LONG).show()
-                startActivity(Intent(this,MainActivity::class.java))
-                finish()
-            }
-            }else{
+            ref.setValue(user)
+                .addOnSuccessListener {
+                    progressDialog.dismiss()
+                    Toast.makeText(context, "UploadData", Toast.LENGTH_LONG).show()
+                    startActivity(Intent(context, MainActivity::class.java))
+
+                }
+        }else{
 
             progressDialog.dismiss()
-            Toast.makeText(this@UpdateProfileActivity, "please enter valid data", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, "please enter valid data", Toast.LENGTH_LONG).show()
         }
     }
 
@@ -148,10 +157,11 @@ class UpdateProfileActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == 82 && resultCode == RESULT_OK && data != null) {
+        if (requestCode == 82 && resultCode == AppCompatActivity.RESULT_OK && data != null) {
             selectedProfileUri = data.data
-            val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, selectedProfileUri)
-            binding.profileImage.setImageBitmap(bitmap)
+
+//            val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, selectedProfileUri)
+            binding.profileImage.setImageURI(selectedProfileUri)
         }
     }
 
@@ -164,4 +174,10 @@ class UpdateProfileActivity : AppCompatActivity() {
         }
         return valid
     }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }
+
