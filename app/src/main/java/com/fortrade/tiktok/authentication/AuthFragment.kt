@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.FragmentTransaction
+import androidx.navigation.fragment.findNavController
 import com.fortrade.tiktok.R
 import com.fortrade.tiktok.databinding.FragmentAuthBinding
 import com.fortrade.tiktok.profile.UpdateProfileFragment
@@ -179,10 +180,7 @@ private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
             val phone = firebaseAuth.currentUser.phoneNumber
             Toast.makeText(context, "Loggin with as $phone", Toast.LENGTH_SHORT).show()
 
-            val updateProfileFragment = UpdateProfileFragment()
-            val transaction :FragmentTransaction = fragmentManager!!.beginTransaction()
-            transaction.replace(R.id.fragment,updateProfileFragment)
-            transaction.commit()
+            findNavController().navigate(R.id.action_authFragment_to_updateProfileFragment)
 
         }
         .addOnFailureListener{e->
