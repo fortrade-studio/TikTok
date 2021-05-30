@@ -183,7 +183,7 @@ private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
         }
         .addOnFailureListener{e->
             progressDialog.dismiss()
-            binding.phoneBox.error = "Enter Valid Mobile Number"
+            binding.phoneBox.error = "Enter Valid OTP"
             binding.phoneBox.requestFocus()
         }
 }
