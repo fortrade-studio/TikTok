@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.isEmpty
 import androidx.fragment.app.Fragment
@@ -29,6 +30,7 @@ class AuthFragment : Fragment() {
     var disable: Boolean = false
     lateinit var conCode : String
     lateinit var phone: String
+    lateinit var resend: TextView
     lateinit var fullNumber: String
     private var forceResendingToken: PhoneAuthProvider.ForceResendingToken? = null
 
@@ -54,7 +56,7 @@ class AuthFragment : Fragment() {
         binding.ScrollViewOTP.visibility = View.GONE
         val timer = MyCounter(60000, 1000)
         firebaseAuth = FirebaseAuth.getInstance()
-
+        resend = view.findViewById(R.id.resend)
         progressDialog = ProgressDialog(context)
         progressDialog.setMessage("Please Wait")
         progressDialog.setCanceledOnTouchOutside(false)
@@ -213,7 +215,7 @@ class AuthFragment : Fragment() {
 
                 override fun onTick(millisUntilFinished: Long) {
 
-                    binding.resend.text = (millisUntilFinished / 1000).toString() + ""
+                    resend.text = (millisUntilFinished / 1000).toString() + ""
                     println("Timer  : " + millisUntilFinished / 1000)
                 }
             }
