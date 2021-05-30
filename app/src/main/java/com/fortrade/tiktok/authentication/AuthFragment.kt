@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isEmpty
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.fortrade.tiktok.R
@@ -124,18 +125,6 @@ class AuthFragment : Fragment() {
                     }
                 }
 
-                //Verify
-                binding.verifyBtn.setOnClickListener {
-                    val code = binding.otpEdt.text.toString().trim()
-                    if (TextUtils.isEmpty(code)) {
-                        Toast.makeText(context,R.string.PleaseEnterotp, Toast.LENGTH_SHORT).show()
-
-                    } else {
-                        verifyPhoneNumberWithCode(mVerificationId, code)
-                    }
-                }
-            }
-
 
         //Verify
         binding.verifyBtn.setOnClickListener {
@@ -208,8 +197,8 @@ class AuthFragment : Fragment() {
                     }
                     .addOnFailureListener { e ->
                         progressDialog.dismiss()
-                        binding.otpEdt.error = "Enter Valid OTP"
-                        binding.otpEdt.requestFocus()
+                        binding.otpView.showError()
+                        binding.otpView.requestFocus()
                     }
             }
 
