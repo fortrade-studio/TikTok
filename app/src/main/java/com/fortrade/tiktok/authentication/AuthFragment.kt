@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.fortrade.tiktok.R
 import com.fortrade.tiktok.databinding.FragmentAuthBinding
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
@@ -84,7 +85,7 @@ class AuthFragment : Fragment() {
                 binding.scrollViewPhoneAuth.visibility = View.GONE
                 binding.ScrollViewOTP.visibility = View.VISIBLE
 
-                Toast.makeText(context, "Verification Code Send", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, R.string.CodeSend, Toast.LENGTH_SHORT).show()
                 binding.textView5.text = "+91${binding.phoneBox.text}"
                 timer.start()
             }
@@ -99,7 +100,7 @@ class AuthFragment : Fragment() {
                     Log.d("phone", "number: $phone")
                     //validate phone number
                     if (TextUtils.isEmpty(fullNumber)) {
-                        Toast.makeText(context, "Please Enter Phone Number ", Toast.LENGTH_SHORT)
+                        Toast.makeText(context, R.string.PhoneNomber, Toast.LENGTH_SHORT)
                             .show()
 
                     } else {
@@ -127,7 +128,7 @@ class AuthFragment : Fragment() {
                 binding.verifyBtn.setOnClickListener {
                     val code = binding.otpEdt.text.toString().trim()
                     if (TextUtils.isEmpty(code)) {
-                        Toast.makeText(context, "Please Enter OTP", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context,R.string.PleaseEnterotp, Toast.LENGTH_SHORT).show()
 
                     } else {
                         verifyPhoneNumberWithCode(mVerificationId, code)

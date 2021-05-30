@@ -20,5 +20,8 @@
     <string name="imageNotSelect">Please Select Image</string>
     <string name="PleaseWait">Please Wait</string>
     <string name="birthday">Please Select Birthday</string>
+    <string name="PleaseEnterotp">Please Enter OTP</string>
+    <string name="PhoneNomber">Please Enter Phone Number </string>
+    <string name="CodeSend">Verification Code Send</string>
 
 </resources>
