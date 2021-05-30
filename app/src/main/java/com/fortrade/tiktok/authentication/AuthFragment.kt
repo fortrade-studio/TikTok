@@ -2,19 +2,17 @@ package com.fortrade.tiktok.authentication
 
 import android.app.Activity
 import android.app.ProgressDialog
-import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.fragment.app.FragmentTransaction
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.fortrade.tiktok.R
 import com.fortrade.tiktok.databinding.FragmentAuthBinding
-import com.fortrade.tiktok.profile.UpdateProfileFragment
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.PhoneAuthCredential
@@ -65,7 +63,8 @@ class AuthFragment : Fragment() {
 
             override fun onVerificationFailed(e: FirebaseException) {
                 progressDialog.dismiss()
-                Toast.makeText(context, "${e.message}", Toast.LENGTH_SHORT).show()
+                binding.phoneBox.error = "Enter Valid Mobile Number"
+                binding.phoneBox.requestFocus()
                 Log.d("phones","${e.message}")
             }
 
@@ -179,15 +178,13 @@ private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
             val phone = firebaseAuth.currentUser.phoneNumber
             Toast.makeText(context, "Loggin with as $phone", Toast.LENGTH_SHORT).show()
 
-            val updateProfileFragment = UpdateProfileFragment()
-            val transaction :FragmentTransaction = fragmentManager!!.beginTransaction()
-            transaction.replace(R.id.fragment,updateProfileFragment)
-            transaction.commit()
+            findNavController().navigate(R.id.action_authFragment_to_updateProfileFragment)
 
         }
         .addOnFailureListener{e->
             progressDialog.dismiss()
-            Toast.makeText(context, "${e.message}", Toast.LENGTH_SHORT).show()
+            binding.phoneBox.error = "Enter Valid Mobile Number"
+            binding.phoneBox.requestFocus()
         }
 }
 

@@ -7,6 +7,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
+import android.text.TextUtils
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -17,6 +18,7 @@ import android.widget.RadioButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.fortrade.tiktok.MainActivity
+import com.fortrade.tiktok.R
 import com.fortrade.tiktok.databinding.FragmentUpdateProfileBinding
 import com.fortrade.tiktok.model.UserProfileData
 import com.google.firebase.database.FirebaseDatabase
@@ -27,11 +29,11 @@ class UpdateProfileFragment : Fragment() {
     companion object {
         private const val TAG = "MainActivity"
     }
-    private lateinit var BirthDay: String
+
+    lateinit var BirthDay: String
     var valid = true
     private lateinit var progressDialog: ProgressDialog
     private var mDateSetListener: DatePickerDialog.OnDateSetListener? = null
-
     private var _binding: FragmentUpdateProfileBinding? = null
     private val binding get() = _binding!!
     override fun onCreateView(
@@ -46,8 +48,10 @@ class UpdateProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         progressDialog = ProgressDialog(context)
-        progressDialog.setTitle("Please Wait")
+        progressDialog.setMessage("PleaseWait")
         progressDialog.setCanceledOnTouchOutside(false)
+        BirthDay = binding.date.text.toString();
+
         binding.date!!.setOnClickListener {
             val cal = Calendar.getInstance()
             val year = cal[Calendar.YEAR]
@@ -91,29 +95,78 @@ class UpdateProfileFragment : Fragment() {
             progressDialog.dismiss()
             Toast.makeText(
                 context,
-                "Please Select Image",
+                R.string.imageNotSelect,
                 Toast.LENGTH_LONG
             ).show()
 
             return
         }
-        progressDialog.show()
-        val filename = UUID.randomUUID().toString()
-        val ref = FirebaseStorage.getInstance().getReference("/images/$filename")
-        ref.putFile(selectedProfileUri!!)
-            .addOnSuccessListener {
-                Toast.makeText(
-                    context,
-                    "Successfully upload",
-                    Toast.LENGTH_SHORT
-                ).show()
-                //Get Download Url
-                ref.downloadUrl.addOnSuccessListener {
-                    //Save Data into Firebase Database
-                    saveUserProfileData(it.toString())
-                }
+        val radio: RadioButton? = view?.findViewById(binding.gender.checkedRadioButtonId)
+        val fullName = binding.name.editableText.toString()
+        val username = binding.userName.editableText.toString()
+        val phoneNumber = binding.phone.editableText.toString()
+        val Bio = binding.bio.editableText.toString()
+        val website = binding.website.editableText.toString()
+        val gender = "${radio?.text}"
+        checkField(binding.name)
+        checkField(binding.userName)
+        checkField(binding.bio)
 
-            }
+
+        if (TextUtils.isEmpty(phoneNumber)) {
+            progressDialog.dismiss()
+            binding.phone.error = "Enter Valid Number"
+            binding.phone.requestFocus()
+            return
+        }
+        if (username.length < 4) {
+            progressDialog.dismiss()
+            binding.userName.error= "UserName should be at least 4 character"
+            binding.userName.requestFocus()
+            return
+        }
+        if (TextUtils.isEmpty(Bio)) {
+            progressDialog.dismiss()
+            binding.bio.error = "Enter Bio"
+            binding.bio.requestFocus()
+            return
+        }
+        if (Bio.length > 150) {
+            progressDialog.dismiss()
+            binding.bio.error = "Max limit 150"
+            binding.bio.requestFocus()
+            return
+        }
+        if (BirthDay=="DD/MM/YYYY"){
+            Toast.makeText(
+                context,
+                R.string.birthday,
+                Toast.LENGTH_LONG
+            ).show()
+            return
+        }
+
+        if (valid) {
+            progressDialog.show()
+            val filename = UUID.randomUUID().toString()
+            val ref = FirebaseStorage.getInstance().getReference("/images/$filename")
+            ref.putFile(selectedProfileUri!!)
+                .addOnSuccessListener {
+                    Toast.makeText(
+                        context,
+                        R.string.uploadSuccess,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    //Get Download Url
+                    ref.downloadUrl.addOnSuccessListener {
+                        //Save Data into Firebase Database
+                        saveUserProfileData(it.toString())
+                    }
+                }
+        } else {
+            progressDialog.dismiss()
+            Toast.makeText(context, R.string.dataValid, Toast.LENGTH_LONG).show()
+        }
     }
 
     private fun saveUserProfileData(ProfileImageUrl: String) {
@@ -122,35 +175,32 @@ class UpdateProfileFragment : Fragment() {
 
         val fullName = binding.name.editableText.toString()
         val username = binding.userName.editableText.toString()
-        val emailId = binding.emailBox.editableText.toString()
         val phoneNumber = binding.phone.editableText.toString()
         val Bio = binding.bio.editableText.toString()
         val website = binding.website.editableText.toString()
-        val gender ="${radio?.text}"
+        val gender = "${radio?.text}"
 
-        checkField(binding.name)
-        checkField(binding.userName)
-        checkField(binding.emailBox)
-        checkField(binding.phone)
-        checkField(binding.bio)
+        val ref =
+            FirebaseDatabase.getInstance().getReference(R.string.databaseRef.toString()).push()
 
-        if (valid){
-            val ref = FirebaseDatabase.getInstance().getReference("userProfileData").push()
+        val user = UserProfileData(
+            fullName,
+            username,
+            phoneNumber,
+            Bio,
+            website,
+            gender,
+            BirthDay,
+            ProfileImageUrl
+        )
 
-            val user = UserProfileData(fullName, username, emailId, phoneNumber, Bio, website, gender,BirthDay,ProfileImageUrl)
+        ref.setValue(user)
+            .addOnSuccessListener {
+                progressDialog.dismiss()
+                Toast.makeText(context, R.string.UploadData, Toast.LENGTH_LONG).show()
+                startActivity(Intent(context, MainActivity::class.java))
+            }
 
-            ref.setValue(user)
-                .addOnSuccessListener {
-                    progressDialog.dismiss()
-                    Toast.makeText(context, "UploadData", Toast.LENGTH_LONG).show()
-                    startActivity(Intent(context, MainActivity::class.java))
-
-                }
-        }else{
-
-            progressDialog.dismiss()
-            Toast.makeText(context, "please enter valid data", Toast.LENGTH_LONG).show()
-        }
     }
 
     var selectedProfileUri: Uri? = null
@@ -160,7 +210,6 @@ class UpdateProfileFragment : Fragment() {
         if (requestCode == 82 && resultCode == AppCompatActivity.RESULT_OK && data != null) {
             selectedProfileUri = data.data
 
-//            val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, selectedProfileUri)
             binding.profileImage.setImageURI(selectedProfileUri)
         }
     }
@@ -168,6 +217,7 @@ class UpdateProfileFragment : Fragment() {
     fun checkField(textField: EditText): Boolean {
         if (textField.text.toString().isEmpty()) {
             textField.error = "Error"
+            textField.requestFocus()
             valid = false
         } else {
             valid = true
