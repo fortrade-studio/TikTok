@@ -116,10 +116,10 @@ class AuthFragment : Fragment() {
 
         //Verify
         binding.verifyBtn.setOnClickListener {
-            val code = binding.otpEdt.text.toString().trim()
+            val code = binding.otpView.otp.trim()
             if (TextUtils.isEmpty(code)){
+                binding.otpView.showError()
                 Toast.makeText(context, "Please Enter OTP", Toast.LENGTH_SHORT).show()
-
             }else{
                 verifyPhoneNumberWithCode(mVerificationId,code)
             }

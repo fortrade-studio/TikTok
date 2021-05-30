@@ -151,18 +151,20 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/circleImageView2" />
 
-                <EditText
-                    android:id="@+id/otp_Edt"
-                    android:layout_width="0dp"
+                <in.aabhasjindal.otptextview.OtpTextView
+                    android:id="@+id/otp_view"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    app:bar_enabled="true"
+                    app:bar_height="2dp"
+                    app:height="40dp"
+                    app:length="6"
+                    app:otp_text_size="24dp"
+                    app:width="40dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="32dp"
                     android:layout_marginEnd="16dp"
-                    android:background="@drawable/edit_text_border"
-                    android:ems="10"
-                    android:hint="Enter OTP"
-                    android:inputType="phone"
-                    android:padding="12dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView5" />
@@ -197,7 +199,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toEndOf="@+id/textView"
-                    app:layout_constraintTop_toBottomOf="@+id/otp_Edt" />
+                    app:layout_constraintTop_toBottomOf="@+id/otp_view" />
 
                 <TextView
                     android:id="@+id/textView"

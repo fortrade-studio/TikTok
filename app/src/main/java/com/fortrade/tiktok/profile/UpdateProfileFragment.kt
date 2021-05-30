@@ -47,6 +47,7 @@ class UpdateProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         progressDialog = ProgressDialog(context)
         progressDialog.setMessage("PleaseWait")
         progressDialog.setCanceledOnTouchOutside(false)
