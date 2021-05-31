@@ -1,0 +1,19 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.fortradestudio.custom.ProfileImagesViewGroup
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:background="@color/design_default_color_on_primary"
+        >
+        <Button
+            android:id="@+id/crossButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_baseline_close_24"
+            />
+    </com.fortradestudio.custom.ProfileImagesViewGroup>
+
+</FrameLayout>
