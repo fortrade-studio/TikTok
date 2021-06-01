@@ -21,6 +21,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.auth.PhoneAuthProvider
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 class AuthFragment : Fragment() {
@@ -37,6 +38,7 @@ class AuthFragment : Fragment() {
     private var mCollBacks: PhoneAuthProvider.OnVerificationStateChangedCallbacks? = null
     private var mVerificationId: String? = null
     private lateinit var firebaseAuth: FirebaseAuth
+    private lateinit var timer: MyCounter
 
     private val TAG = "TAGES"
     private lateinit var progressDialog: ProgressDialog
@@ -54,7 +56,7 @@ class AuthFragment : Fragment() {
 
         binding.scrollViewPhoneAuth.visibility = View.VISIBLE
         binding.ScrollViewOTP.visibility = View.GONE
-        val timer = MyCounter(60000, 1000)
+        timer = MyCounter(60000, 1000)
         firebaseAuth = FirebaseAuth.getInstance()
         resend = view.findViewById(R.id.resend)
         progressDialog = ProgressDialog(context)
@@ -115,9 +117,6 @@ class AuthFragment : Fragment() {
                 binding.resend.setOnClickListener {
 
                     if (disable == true) {
-//                        val conCode = binding.conCode.text.toString()
-//                        val phone = binding.phoneBox.text.toString()
-//                      fullNumber = "$conCode$phone"
                         Log.d("fullNumber", "full number: $fullNumber")
                         Log.d("phone", "full number: $phone")
                         //validate phone number
@@ -193,7 +192,7 @@ class AuthFragment : Fragment() {
                         progressDialog.dismiss()
                         val phone = firebaseAuth.currentUser.phoneNumber
                         Toast.makeText(context, "Loggin with as $phone", Toast.LENGTH_SHORT).show()
-
+                        timer.cancel()
                         findNavController().navigate(R.id.action_authFragment_to_updateProfileFragment)
 
                     }
@@ -210,7 +209,7 @@ class AuthFragment : Fragment() {
                 override fun onFinish() {
                     println("Timer Completed.")
                     disable = true
-                    binding.resend.text = "Resend"
+                    resend.text = "Resend"
                 }
 
                 override fun onTick(millisUntilFinished: Long) {
