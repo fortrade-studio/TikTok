@@ -87,21 +87,17 @@ class UpdateProfileFragment : Fragment() {
 
         binding.saveProfile.setOnClickListener {
 
-            uploadImageToFirebaseStorage()
+            if (selectedProfileUri != null) {
+
+                uploadImageToFirebaseStorage()
+            }else{
+                saveUserProfileData()
+            }
         }
     }
 
     private fun uploadImageToFirebaseStorage() {
-        if (selectedProfileUri == null) {
-            progressDialog.dismiss()
-            Toast.makeText(
-                context,
-                R.string.imageNotSelect,
-                Toast.LENGTH_LONG
-            ).show()
 
-            return
-        }
         val radio: RadioButton? = view?.findViewById(binding.gender.checkedRadioButtonId)
         val fullName = binding.name.editableText.toString()
         val username = binding.userName.editableText.toString()
@@ -122,7 +118,7 @@ class UpdateProfileFragment : Fragment() {
         }
         if (username.length < 4) {
             progressDialog.dismiss()
-            binding.userName.error= "UserName should be at least 4 character"
+            binding.userName.error = "UserName should be at least 4 character"
             binding.userName.requestFocus()
             return
         }
@@ -138,7 +134,7 @@ class UpdateProfileFragment : Fragment() {
             binding.bio.requestFocus()
             return
         }
-        if (BirthDay=="DD/MM/YYYY"){
+        if (BirthDay == "DD/MM/YYYY") {
             Toast.makeText(
                 context,
                 R.string.birthday,
@@ -202,6 +198,78 @@ class UpdateProfileFragment : Fragment() {
                 startActivity(Intent(context, MainActivity::class.java))
             }
 
+    }
+
+    private fun saveUserProfileData() {
+
+        val radio: RadioButton? = view?.findViewById(binding.gender.checkedRadioButtonId)
+
+        val fullName = binding.name.editableText.toString()
+        val username = binding.userName.editableText.toString()
+        val phoneNumber = binding.phone.editableText.toString()
+        val Bio = binding.bio.editableText.toString()
+        val website = binding.website.editableText.toString()
+        val gender = "${radio?.text}"
+
+        if (TextUtils.isEmpty(phoneNumber)) {
+            progressDialog.dismiss()
+            binding.phone.error = "Enter Valid Number"
+            binding.phone.requestFocus()
+            return
+        }
+        if (username.length < 4) {
+            progressDialog.dismiss()
+            binding.userName.error = "UserName should be at least 4 character"
+            binding.userName.requestFocus()
+            return
+        }
+        if (TextUtils.isEmpty(Bio)) {
+            progressDialog.dismiss()
+            binding.bio.error = "Enter Bio"
+            binding.bio.requestFocus()
+            return
+        }
+        if (Bio.length > 150) {
+            progressDialog.dismiss()
+            binding.bio.error = "Max limit 150"
+            binding.bio.requestFocus()
+            return
+        }
+        if (BirthDay == "DD/MM/YYYY") {
+            Toast.makeText(
+                context,
+                R.string.birthday,
+                Toast.LENGTH_LONG
+            ).show()
+            return
+        }
+
+        val ref =
+            FirebaseDatabase.getInstance().getReference(R.string.databaseRef.toString()).push()
+
+        if (valid) {
+                progressDialog.show()
+            val user = UserProfileData(
+                fullName,
+                username,
+                phoneNumber,
+                Bio,
+                website,
+                gender,
+                BirthDay,
+                null
+            )
+
+            ref.setValue(user)
+                .addOnSuccessListener {
+                    progressDialog.dismiss()
+                    Toast.makeText(context, R.string.UploadData, Toast.LENGTH_LONG).show()
+                    startActivity(Intent(context, MainActivity::class.java))
+                }
+        }else{
+            progressDialog.dismiss()
+            Toast.makeText(context, R.string.dataValid, Toast.LENGTH_LONG).show()
+        }
     }
 
     var selectedProfileUri: Uri? = null

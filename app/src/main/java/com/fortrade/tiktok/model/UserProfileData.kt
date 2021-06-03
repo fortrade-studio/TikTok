@@ -8,6 +8,6 @@ data class UserProfileData(
     val Website: String,
     val gender: String,
     val birthOfDate: String,
-    val ProfileImageUrl: String
+    val ProfileImageUrl: String? = null
 ) {
 }
