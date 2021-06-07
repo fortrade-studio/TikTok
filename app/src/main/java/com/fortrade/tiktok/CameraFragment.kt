@@ -1,5 +1,6 @@
 package com.fortrade.tiktok
 
+import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.media.Image
@@ -11,18 +12,22 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageButton
-import android.widget.VideoView
+import android.widget.*
 import androidx.core.content.FileProvider
+import com.karumi.dexter.Dexter
+import com.karumi.dexter.PermissionToken
+import com.karumi.dexter.listener.PermissionDeniedResponse
+import com.karumi.dexter.listener.PermissionGrantedResponse
+import com.karumi.dexter.listener.PermissionRequest
+import com.karumi.dexter.listener.single.PermissionListener
 import kotlinx.android.synthetic.main.item_video.*
 import java.io.File
 
 
 class CameraFragment : Fragment() {
 
-//    private lateinit var videoUri: Uri
     private lateinit var cheptureVideo: ImageButton
+    private lateinit var gallery: ImageView
     private lateinit var videoRec: VideoView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,52 +41,60 @@ class CameraFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_camera, container, false)
         cheptureVideo = view.findViewById(R.id.cheptureVideo)
+        gallery = view.findViewById(R.id.gallery)
         videoRec = view.findViewById(R.id.videoRec)
-//        cheptureVideo.setOnClickListener {
-//            recodeVideo()
-//        }
+
+
+
 
         cheptureVideo.setOnClickListener {
             val intent = Intent(MediaStore.ACTION_VIDEO_CAPTURE);
             intent.putExtra(MediaStore.EXTRA_DURATION_LIMIT,10)
             startActivityForResult(intent,1)
         }
+
+        gallery.setOnClickListener {
+            Dexter.withContext(context)
+                .withPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+                .withListener(object : PermissionListener {
+                    override fun onPermissionGranted(permissionGrantedResponse: PermissionGrantedResponse) {
+                        val intent = Intent()
+                        intent.type = "video/*"
+                        intent.action = Intent.ACTION_GET_CONTENT
+                        startActivityForResult(intent, 8)
+                    }
+
+                    override fun onPermissionDenied(permissionDeniedResponse: PermissionDeniedResponse) {}
+                    override fun onPermissionRationaleShouldBeShown(
+                        permissionRequest: PermissionRequest,
+                        permissionToken: PermissionToken
+                    ) {
+                        permissionToken.continuePermissionRequest()
+                    }
+                }).check()
+        }
+
         return view
     }
-//
-//    private fun recodeVideo() {
-//        val videoFile = createVideoFile()
-//        if (videoFile != null){
-//            videoUri = FileProvider.getUriForFile(
-//                requireContext(),
-//                "com.video.recode.fileprovider",
-//                videoFile
-//            )
-//            val intent  = Intent(MediaStore.ACTION_VIDEO_CAPTURE)
-//            intent.putExtra(MediaStore.EXTRA_OUTPUT,videoUri)
-//
-//            startActivityForResult(intent,1)
-//        }
-//    }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
        if (requestCode == 1 && resultCode == Activity.RESULT_OK){
            videoRec.setVideoURI(data?.data)
            videoRec.start()
        }
 
+        if (resultCode == Activity.RESULT_OK && requestCode == 8) {
+            if (data?.data != null) {
+                var uri:Uri = data.data!!
+                videoRec.setVideoURI(uri)
+                var mediaController: MediaController = MediaController(context)
+                videoRec.setMediaController(mediaController)
+                videoRec.start()
+
+            }
+        }
+
     }
 
-//    private fun createVideoFile(): File {
-//        val fileName = "My Video"
-//        val storageDir = Environment.getStorageDirectory()//Environment.DIRECTORY_MOVIES
-//
-//        return File.createTempFile(
-//            fileName,
-//            ".mp4",
-//            storageDir
-//        )
-//    }
 
 
 }

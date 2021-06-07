@@ -22,6 +22,8 @@ import com.fortrade.tiktok.MainActivity
 import com.fortrade.tiktok.R
 import com.fortrade.tiktok.databinding.FragmentUpdateProfileBinding
 import com.fortrade.tiktok.model.UserProfileData
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import java.util.*
@@ -244,7 +246,6 @@ class UpdateProfileFragment : Fragment() {
             ).show()
             return
         }
-
         val ref =
             FirebaseDatabase.getInstance().getReference(R.string.databaseRef.toString()).push()
 
