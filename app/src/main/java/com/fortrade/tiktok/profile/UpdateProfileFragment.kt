@@ -17,6 +17,7 @@ import android.widget.EditText
 import android.widget.RadioButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.fragment.findNavController
 import com.fortrade.tiktok.MainActivity
 import com.fortrade.tiktok.R
 import com.fortrade.tiktok.databinding.FragmentUpdateProfileBinding
@@ -195,7 +196,7 @@ class UpdateProfileFragment : Fragment() {
             .addOnSuccessListener {
                 progressDialog.dismiss()
                 Toast.makeText(context, R.string.UploadData, Toast.LENGTH_LONG).show()
-                startActivity(Intent(context, MainActivity::class.java))
+                findNavController().navigate(R.id.action_updateProfileFragment_to_homeFragment)
             }
 
     }
@@ -264,7 +265,7 @@ class UpdateProfileFragment : Fragment() {
                 .addOnSuccessListener {
                     progressDialog.dismiss()
                     Toast.makeText(context, R.string.UploadData, Toast.LENGTH_LONG).show()
-                    startActivity(Intent(context, MainActivity::class.java))
+                    findNavController().navigate(R.id.action_updateProfileFragment_to_homeFragment)
                 }
         }else{
             progressDialog.dismiss()
