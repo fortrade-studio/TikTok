@@ -180,8 +180,9 @@ class UpdateProfileFragment : Fragment() {
         val website = binding.website.editableText.toString()
         val gender = "${radio?.text}"
 
+        val users = FirebaseAuth.getInstance().currentUser
         val ref =
-            FirebaseDatabase.getInstance().getReference(R.string.databaseRef.toString()).push()
+            FirebaseDatabase.getInstance().getReference("userProfileData").child(users.uid)
 
         val user = UserProfileData(
             fullName,
@@ -246,8 +247,9 @@ class UpdateProfileFragment : Fragment() {
             ).show()
             return
         }
+        val users = FirebaseAuth.getInstance().currentUser
         val ref =
-            FirebaseDatabase.getInstance().getReference(R.string.databaseRef.toString()).push()
+            FirebaseDatabase.getInstance().getReference("userProfileData").child(users.uid)
 
         if (valid) {
                 progressDialog.show()
