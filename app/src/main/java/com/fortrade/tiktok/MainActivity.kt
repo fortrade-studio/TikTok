@@ -5,7 +5,11 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.navigation.findNavController
+import androidx.viewpager.widget.ViewPager
 import com.fortrade.tiktok.authentication.AuthFragment
+import com.fortrade.tiktok.profile.ClipsFragment
+import com.fortrade.tiktok.profile.GalleryFragment
+import com.google.android.material.tabs.TabLayout
 import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : AppCompatActivity() {
@@ -14,7 +18,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         auth = FirebaseAuth.getInstance()
+
     }
+
 
 
     override fun onStart() {

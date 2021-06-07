@@ -21,4 +21,9 @@
         android:name="com.fortrade.tiktok.profile.UpdateProfileFragment"
         android:label="fragment_update_profile"
         tools:layout="@layout/fragment_update_profile" />
+    <fragment
+        android:id="@+id/userProfileFragment"
+        android:name="com.fortrade.tiktok.profile.UserProfileFragment"
+        android:label="fragment_user_profile"
+        tools:layout="@layout/fragment_user_profile" />
 </navigation>
