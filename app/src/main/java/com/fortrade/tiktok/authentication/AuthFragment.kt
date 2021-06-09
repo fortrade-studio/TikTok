@@ -13,6 +13,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.isEmpty
 import androidx.fragment.app.Fragment
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import com.fortrade.tiktok.R
 import com.fortrade.tiktok.databinding.FragmentAuthBinding
@@ -54,10 +55,15 @@ class AuthFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        firebaseAuth = FirebaseAuth.getInstance()
+        if (firebaseAuth.currentUser!=null){
+            Navigation.findNavController(requireView()).navigate(R.id.action_authFragment_to_homeFragment)
+        }
+
         binding.scrollViewPhoneAuth.visibility = View.VISIBLE
         binding.ScrollViewOTP.visibility = View.GONE
         timer = MyCounter(60000, 1000)
-        firebaseAuth = FirebaseAuth.getInstance()
+
         resend = view.findViewById(R.id.resend)
         progressDialog = ProgressDialog(context)
         progressDialog.setMessage("Please Wait")

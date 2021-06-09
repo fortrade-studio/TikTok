@@ -5,8 +5,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.VideoView
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.fortrade.tiktok.R
+import com.fortrade.tiktok.diffUtils.VideosDiffUtils
 import kotlinx.android.synthetic.main.item_video.view.*
 
 class VideoAdapter(arrVideo:ArrayList<VideoModel>) : RecyclerView.Adapter<VideoAdapter.VideoViewHolder>() {
@@ -25,6 +27,14 @@ class VideoAdapter(arrVideo:ArrayList<VideoModel>) : RecyclerView.Adapter<VideoA
         holder.setVideoData(arrVideoModel[position])
     }
 
+    fun updateVideoList(newList:List<VideoModel>){
+        val videoUtilsCallback = VideosDiffUtils(newList,arrVideoModel)
+        val diff = DiffUtil.calculateDiff(videoUtilsCallback)
+        arrVideoModel.clear()
+        arrVideoModel.addAll(newList)
+        diff.dispatchUpdatesTo(this)
+    }
+
     class VideoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
 
         fun setVideoData(videoModel: VideoModel){
@@ -36,15 +46,7 @@ class VideoAdapter(arrVideo:ArrayList<VideoModel>) : RecyclerView.Adapter<VideoA
                 override fun onPrepared(mp: MediaPlayer) {
                     itemView.progressBar.visibility = View.GONE
                     mp.start()
-                    val videoRatio = mp.videoWidth.toFloat() / mp.videoHeight.toFloat()
-                    val screenRatio = itemView.videoView.width.toFloat() / itemView.videoView.height.toFloat()
 
-                    val scale = videoRatio / screenRatio
-                    if (scale > 1f){
-                        itemView.videoView.scaleX = scale
-                    }else{
-                        itemView.videoView.scaleY = (1f / scale)
-                    }
                 }
 
             })
