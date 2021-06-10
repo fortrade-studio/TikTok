@@ -28,7 +28,7 @@ class GalleryFragment : Fragment() {
         "https://cdn1.iconfinder.com/data/icons/ui-colored-1/100/UI__2-512.png"
     )
 
-    val adapter = GalleryAdapter(images)
+    val galleryAdapter = GalleryAdapter(images)
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,8 +50,9 @@ class GalleryFragment : Fragment() {
         super.onViewCreated(itemView, savedInstanceState)
 
 
-        recycler_view_item.adapter = adapter
+        recycler_view_item.adapter = galleryAdapter
         recycler_view_item.layoutManager = GridLayoutManager(activity,3)
+
 
 
     }
