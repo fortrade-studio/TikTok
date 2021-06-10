@@ -10,6 +10,7 @@ import android.text.TextPaint
 import android.util.AttributeSet
 import android.util.Log
 import android.view.*
+import android.view.accessibility.AccessibilityNodeInfo.ACTION_CLICK
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.BounceInterpolator
 import android.widget.Button
@@ -36,6 +37,8 @@ class ProfileImagesViewGroup @JvmOverloads constructor(
         final val handler = Handler()
     }
 
+
+    private var isInit = false
 
 
 
@@ -114,7 +117,7 @@ class ProfileImagesViewGroup @JvmOverloads constructor(
     override fun onDraw(c: Canvas?) {
         if (bit != null) {
             c?.drawColor(Color.WHITE)
-            val scalex= width/bit.width.toFloat()
+            val scalex= width/(bit.width.toFloat()+12)
             val scaley = height/bit.height.toFloat()
             m.setScale(scalex,scaley,0f,0f)
             canvas.drawRoundRect(0f, 0f, width.toFloat(), height.toFloat(), 15f, 15f, paint)
@@ -137,13 +140,14 @@ class ProfileImagesViewGroup @JvmOverloads constructor(
         }
     }
 
-    private var bit: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.pp)
+    private var bit: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.plus)
 
     private var isDelete = false
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     fun setBitmap(bitmap: Bitmap) {
         this.bit = bitmap.copy(Bitmap.Config.ARGB_8888, true)
+        isInit = true
         invalidate()
     }
 
@@ -157,6 +161,7 @@ class ProfileImagesViewGroup @JvmOverloads constructor(
             val URL = URL(url)
             val decodeStream = BitmapFactory.decodeStream(URL.openConnection().getInputStream())
             this.bit = decodeStream.copy(Bitmap.Config.ARGB_8888,true)
+            isInit = true
             invalidate()
         }
     }
@@ -179,9 +184,17 @@ class ProfileImagesViewGroup @JvmOverloads constructor(
     }
 
 
-    override fun onTouchEvent(event: MotionEvent?): Boolean {
+    override fun performClick(): Boolean {
+        super.performClick()
+        return true;
+    }
 
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
         if (event?.action == MotionEvent.ACTION_DOWN) {
+            if(!isInit){
+                performClick()
+                return true
+            }
             handler.postDelayed(longPressRunnable, ViewConfiguration.getLongPressTimeout().toLong())
         }
         if (event?.action == MotionEvent.ACTION_MOVE || event?.action == MotionEvent.ACTION_UP) {

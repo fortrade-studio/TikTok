@@ -17,15 +17,9 @@ import kotlinx.android.synthetic.main.fragment_gallery.*
 class GalleryFragment : Fragment() {
 
     var images = mutableListOf(
-
-        "https://cdn1.iconfinder.com/data/icons/ui-colored-1/100/UI__2-512.png",
-        "https://cdn1.iconfinder.com/data/icons/ui-colored-1/100/UI__2-512.png",
-        "https://cdn1.iconfinder.com/data/icons/ui-colored-1/100/UI__2-512.png",
-        "https://cdn1.iconfinder.com/data/icons/ui-colored-1/100/UI__2-512.png",
-        "https://cdn1.iconfinder.com/data/icons/ui-colored-1/100/UI__2-512.png",
-        "https://cdn1.iconfinder.com/data/icons/ui-colored-1/100/UI__2-512.png",
-        "https://cdn1.iconfinder.com/data/icons/ui-colored-1/100/UI__2-512.png",
-        "https://cdn1.iconfinder.com/data/icons/ui-colored-1/100/UI__2-512.png"
+        "http://aryeahtyagi.herokuapp.com/me.jpg",
+        "https://instagram.flko4-1.fna.fbcdn.net/v/t51.2885-15/sh0.08/e35/s750x750/69285147_719829075178685_2840810630290609170_n.jpg?tp=1&_nc_ht=instagram.flko4-1.fna.fbcdn.net&_nc_cat=105&_nc_ohc=yEZ1gcsyqgAAX8MzEon&edm=AP_V10EBAAAA&ccb=7-4&oh=dc4ca0b27c7e7c82844f3de0da72b2fe&oe=60C9555E&_nc_sid=4f375e",
+        "https://instagram.flko4-1.fna.fbcdn.net/v/t51.2885-15/e35/c0.107.1206.1206a/s240x240/67500039_741688716290675_5800233088515666625_n.jpg?tp=1&_nc_ht=instagram.flko4-1.fna.fbcdn.net&_nc_cat=111&_nc_ohc=DVK4mteB_OkAX-oBC_T&edm=ABfd0MgBAAAA&ccb=7-4&oh=9afea6f68aea5fc31ffb28986c2b34ea&oe=60C829F9&_nc_sid=7bff83"
     )
 
     val adapter = GalleryAdapter(images)

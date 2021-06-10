@@ -14,6 +14,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.fortrade.tiktok.utils.getVideoId
 import com.fortrade.tiktok.viewModel.HomeFragmentViewModel
 import com.fortrade.tiktok.viewModel.HomeFragmentViewModelFactory
+import com.fortradestudio.custom.RemoveButtonListener
 import com.leeladher.video.VideoAdapter
 import com.leeladher.video.VideoModel
 import kotlinx.android.synthetic.main.fragment_home.*
@@ -41,6 +42,7 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val data = requireActivity().intent.data
+
 
         if(data!=null){
             // user navigate through dynamic link

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph.xml"
-    app:startDestination="@id/authFragment">
+    app:startDestination="@id/userProfileFragment">
 
     <fragment
         android:id="@+id/authFragment"
@@ -62,7 +62,8 @@
         android:label="UserProfileFragment" >
         <argument
             android:name="userNumber"
-            app:argType="string" />
+            app:argType="string"
+            android:defaultValue="1234567890" />
     </fragment>
 
 </navigation>
