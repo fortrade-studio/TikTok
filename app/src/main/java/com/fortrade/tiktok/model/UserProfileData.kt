@@ -1,5 +1,10 @@
 package com.fortrade.tiktok.model
 
+
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+@Parcelize
 data class UserProfileData(
     val fullName: String,
     val UserName: String,
@@ -8,6 +13,5 @@ data class UserProfileData(
     val Website: String,
     val gender: String,
     val birthOfDate: String,
-    val ProfileImageUrl: String
-) {
-}
+    val ProfileImageUrl: String? = null
+):Parcelable

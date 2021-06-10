@@ -2,8 +2,11 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'com.google.gms.google-services'
+    id 'kotlin-android-extensions'
 }
 apply plugin: 'kotlin-android-extensions'
+apply plugin: "androidx.navigation.safeargs.kotlin"
+
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.2"
@@ -64,4 +67,17 @@ dependencies {
 
     //otp view
     implementation 'com.github.aabhasr1:OtpView:v1.1.2'
+    def camerax_version = "1.0.0-beta03"
+
+    implementation "androidx.camera:camera-camera2:$camerax_version"
+    implementation "androidx.camera:camera-lifecycle:$camerax_version"
+    implementation "androidx.camera:camera-view:1.0.0-alpha10"
+    implementation 'com.karumi:dexter:6.2.2'
+
+    implementation 'com.github.bumptech.glide:glide:4.12.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
+
+    implementation 'com.squareup.picasso:picasso:2.5.2'
+
+
 }

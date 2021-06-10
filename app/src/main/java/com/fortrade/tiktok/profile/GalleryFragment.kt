@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,16 +18,17 @@ class GalleryFragment : Fragment() {
 
     var images = mutableListOf(
 
-        R.drawable.white_person_icon,
-        R.drawable.pp,
-        R.drawable.pp,
-        R.drawable.ic_images,
-        R.drawable.ic_images,
-        R.drawable.ic_images,
-        R.drawable.pp,
-        R.drawable.pp
-
+        "https://cdn1.iconfinder.com/data/icons/ui-colored-1/100/UI__2-512.png",
+        "https://cdn1.iconfinder.com/data/icons/ui-colored-1/100/UI__2-512.png",
+        "https://cdn1.iconfinder.com/data/icons/ui-colored-1/100/UI__2-512.png",
+        "https://cdn1.iconfinder.com/data/icons/ui-colored-1/100/UI__2-512.png",
+        "https://cdn1.iconfinder.com/data/icons/ui-colored-1/100/UI__2-512.png",
+        "https://cdn1.iconfinder.com/data/icons/ui-colored-1/100/UI__2-512.png",
+        "https://cdn1.iconfinder.com/data/icons/ui-colored-1/100/UI__2-512.png",
+        "https://cdn1.iconfinder.com/data/icons/ui-colored-1/100/UI__2-512.png"
     )
+
+    val adapter = GalleryAdapter(images)
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,10 +49,11 @@ class GalleryFragment : Fragment() {
     override fun onViewCreated(itemView: View, savedInstanceState: Bundle?) {
         super.onViewCreated(itemView, savedInstanceState)
 
-        val adapter = GalleryAdapter(images)
+
         recycler_view_item.adapter = adapter
         recycler_view_item.layoutManager = GridLayoutManager(activity,3)
 
 
     }
+
 }

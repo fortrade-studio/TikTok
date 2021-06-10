@@ -17,10 +17,13 @@ import android.widget.EditText
 import android.widget.RadioButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.fragment.findNavController
 import com.fortrade.tiktok.MainActivity
 import com.fortrade.tiktok.R
 import com.fortrade.tiktok.databinding.FragmentUpdateProfileBinding
 import com.fortrade.tiktok.model.UserProfileData
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import java.util.*
@@ -87,21 +90,17 @@ class UpdateProfileFragment : Fragment() {
 
         binding.saveProfile.setOnClickListener {
 
-            uploadImageToFirebaseStorage()
+            if (selectedProfileUri != null) {
+
+                uploadImageToFirebaseStorage()
+            }else{
+                saveUserProfileData()
+            }
         }
     }
 
     private fun uploadImageToFirebaseStorage() {
-        if (selectedProfileUri == null) {
-            progressDialog.dismiss()
-            Toast.makeText(
-                context,
-                R.string.imageNotSelect,
-                Toast.LENGTH_LONG
-            ).show()
 
-            return
-        }
         val radio: RadioButton? = view?.findViewById(binding.gender.checkedRadioButtonId)
         val fullName = binding.name.editableText.toString()
         val username = binding.userName.editableText.toString()
@@ -122,7 +121,7 @@ class UpdateProfileFragment : Fragment() {
         }
         if (username.length < 4) {
             progressDialog.dismiss()
-            binding.userName.error= "UserName should be at least 4 character"
+            binding.userName.error = "UserName should be at least 4 character"
             binding.userName.requestFocus()
             return
         }
@@ -138,7 +137,7 @@ class UpdateProfileFragment : Fragment() {
             binding.bio.requestFocus()
             return
         }
-        if (BirthDay=="DD/MM/YYYY"){
+        if (BirthDay == "DD/MM/YYYY") {
             Toast.makeText(
                 context,
                 R.string.birthday,
@@ -181,8 +180,9 @@ class UpdateProfileFragment : Fragment() {
         val website = binding.website.editableText.toString()
         val gender = "${radio?.text}"
 
+        val users = FirebaseAuth.getInstance().currentUser
         val ref =
-            FirebaseDatabase.getInstance().getReference(R.string.databaseRef.toString()).push()
+            FirebaseDatabase.getInstance().getReference("userProfileData")
 
         val user = UserProfileData(
             fullName,
@@ -195,13 +195,87 @@ class UpdateProfileFragment : Fragment() {
             ProfileImageUrl
         )
 
-        ref.setValue(user)
+        ref.child(user.PhoneNumber).setValue(user)
             .addOnSuccessListener {
                 progressDialog.dismiss()
                 Toast.makeText(context, R.string.UploadData, Toast.LENGTH_LONG).show()
-                startActivity(Intent(context, MainActivity::class.java))
+                val action = UpdateProfileFragmentDirections.actionUpdateProfileFragmentToUserProfileFragment(user.PhoneNumber)
+                findNavController().navigate(action)
             }
 
+    }
+
+    private fun saveUserProfileData() {
+
+        val radio: RadioButton? = view?.findViewById(binding.gender.checkedRadioButtonId)
+
+        val fullName = binding.name.editableText.toString()
+        val username = binding.userName.editableText.toString()
+        val phoneNumber = binding.phone.editableText.toString()
+        val Bio = binding.bio.editableText.toString()
+        val website = binding.website.editableText.toString()
+        val gender = "${radio?.text}"
+
+        if (TextUtils.isEmpty(phoneNumber)) {
+            progressDialog.dismiss()
+            binding.phone.error = "Enter Valid Number"
+            binding.phone.requestFocus()
+            return
+        }
+        if (username.length < 4) {
+            progressDialog.dismiss()
+            binding.userName.error = "UserName should be at least 4 character"
+            binding.userName.requestFocus()
+            return
+        }
+        if (TextUtils.isEmpty(Bio)) {
+            progressDialog.dismiss()
+            binding.bio.error = "Enter Bio"
+            binding.bio.requestFocus()
+            return
+        }
+        if (Bio.length > 150) {
+            progressDialog.dismiss()
+            binding.bio.error = "Max limit 150"
+            binding.bio.requestFocus()
+            return
+        }
+        if (BirthDay == "DD/MM/YYYY") {
+            Toast.makeText(
+                context,
+                R.string.birthday,
+                Toast.LENGTH_LONG
+            ).show()
+            return
+        }
+        val users = FirebaseAuth.getInstance().currentUser
+        val ref =
+            FirebaseDatabase.getInstance().getReference("userProfileData")
+
+        if (valid) {
+                progressDialog.show()
+            val user = UserProfileData(
+                fullName,
+                username,
+                phoneNumber,
+                Bio,
+                website,
+                gender,
+                BirthDay,
+                null
+            )
+
+            ref.child(user.PhoneNumber).setValue(user)
+                .addOnSuccessListener {
+                    progressDialog.dismiss()
+                    Toast.makeText(context, R.string.UploadData, Toast.LENGTH_LONG).show()
+                    val action = UpdateProfileFragmentDirections.actionUpdateProfileFragmentToUserProfileFragment(user.PhoneNumber)
+                    findNavController().navigate(action)
+                }
+        }else{
+            progressDialog.dismiss()
+            Toast.makeText(context, R.string.dataValid, Toast.LENGTH_LONG).show()
+        }
     }
 
     var selectedProfileUri: Uri? = null

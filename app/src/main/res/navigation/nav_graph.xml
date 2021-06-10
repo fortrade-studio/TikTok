@@ -9,21 +9,53 @@
         android:id="@+id/authFragment"
         android:name="com.fortrade.tiktok.authentication.AuthFragment"
         android:label="fragment_auth"
-        tools:layout="@layout/fragment_auth" >
+        tools:layout="@layout/fragment_auth">
         <action
             android:id="@+id/action_authFragment_to_updateProfileFragment"
             app:destination="@id/updateProfileFragment"
             app:popUpTo="@id/updateProfileFragment"
             app:popUpToInclusive="true" />
+        <argument
+            android:name="userNumber"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_authFragment_to_userProfileFragment"
+            app:destination="@id/userProfileFragment" />
     </fragment>
     <fragment
         android:id="@+id/updateProfileFragment"
         android:name="com.fortrade.tiktok.profile.UpdateProfileFragment"
         android:label="fragment_update_profile"
-        tools:layout="@layout/fragment_update_profile" />
+        tools:layout="@layout/fragment_update_profile" >
+        <action
+            android:id="@+id/action_updateProfileFragment_to_userProfileFragment"
+            app:destination="@id/userProfileFragment" />
+        <argument
+            android:name="userNumber"
+            app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.fortrade.tiktok.HomeFragment"
+        android:label="fragment_show_video"
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_cameraFragment"
+            app:destination="@id/cameraFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/cameraFragment"
+        android:name="com.fortrade.tiktok.CameraFragment"
+        android:label="fragment_camera"
+        tools:layout="@layout/fragment_camera" />
     <fragment
         android:id="@+id/userProfileFragment"
         android:name="com.fortrade.tiktok.profile.UserProfileFragment"
-        android:label="fragment_user_profile"
-        tools:layout="@layout/fragment_user_profile" />
+        android:label="UserProfileFragment" >
+        <argument
+            android:name="userNumber"
+            app:argType="string" />
+    </fragment>
+
 </navigation>
