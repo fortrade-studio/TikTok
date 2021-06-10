@@ -113,6 +113,7 @@ class ProfileImagesViewGroup @JvmOverloads constructor(
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onDraw(c: Canvas?) {
         if (bit != null) {
+            c?.drawColor(Color.WHITE)
             val scalex= width/bit.width.toFloat()
             val scaley = height/bit.height.toFloat()
             m.setScale(scalex,scaley,0f,0f)

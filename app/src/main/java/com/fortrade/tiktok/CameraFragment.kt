@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.media.Image
+import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
@@ -49,7 +50,7 @@ class CameraFragment : Fragment() {
 
         cheptureVideo.setOnClickListener {
             val intent = Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-            intent.putExtra(MediaStore.EXTRA_DURATION_LIMIT,10)
+            intent.putExtra(MediaStore.EXTRA_DURATION_LIMIT,60)
             startActivityForResult(intent,1)
         }
 
@@ -87,14 +88,23 @@ class CameraFragment : Fragment() {
                 var uri:Uri = data.data!!
                 videoRec.setVideoURI(uri)
                 var mediaController: MediaController = MediaController(context)
-                videoRec.setMediaController(mediaController)
-                videoRec.start()
-
+                val retriever = MediaMetadataRetriever()
+                retriever.setDataSource(context, Uri.parse(uri.toString()))
+                val time = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)
+                var timeInMillisec = time?.toLong();
+                retriever.release()
+                if (timeInMillisec != null) {
+                    if (timeInMillisec<=60000)
+                    {
+                        videoRec.setMediaController(mediaController)
+                        videoRec.start()
+                    }
+                    else
+                    {
+                        Toast.makeText(getActivity(),"Duration of video more than 60 seconds",Toast.LENGTH_SHORT).show();
+                    }
+                }
             }
         }
-
     }
-
-
-
 }
