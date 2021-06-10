@@ -11,19 +11,23 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
-import androidx.core.view.isEmpty
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import com.fortrade.tiktok.R
 import com.fortrade.tiktok.databinding.FragmentAuthBinding
+import com.fortrade.tiktok.profile.UpdateProfileFragmentDirections
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.auth.PhoneAuthProvider
-import java.util.*
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import java.util.concurrent.TimeUnit
+
 
 class AuthFragment : Fragment() {
 
@@ -32,6 +36,7 @@ class AuthFragment : Fragment() {
     var disable: Boolean = false
     lateinit var conCode : String
     lateinit var phone: String
+    lateinit var phoneCurrentUser: String
     lateinit var resend: TextView
     lateinit var fullNumber: String
     private var forceResendingToken: PhoneAuthProvider.ForceResendingToken? = null
@@ -97,6 +102,7 @@ class AuthFragment : Fragment() {
                 binding.ScrollViewOTP.visibility = View.VISIBLE
 
                 Toast.makeText(context, R.string.CodeSend, Toast.LENGTH_SHORT).show()
+                phoneCurrentUser = binding.phoneBox.text.toString()
                 binding.textView5.text = "+91${binding.phoneBox.text}"
                 timer.start()
             }
@@ -193,13 +199,34 @@ class AuthFragment : Fragment() {
             private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
                 progressDialog.setMessage("Logging In...")
 
+
                 firebaseAuth.signInWithCredential(credential)
                     .addOnSuccessListener {
                         progressDialog.dismiss()
                         val phone = firebaseAuth.currentUser.phoneNumber
                         Toast.makeText(context, "Loggin with as $phone", Toast.LENGTH_SHORT).show()
                         timer.cancel()
-                        findNavController().navigate(R.id.action_authFragment_to_updateProfileFragment)
+
+                        var ref = FirebaseDatabase.getInstance().getReference("userProfileData").child(phoneCurrentUser)
+                        ref.addListenerForSingleValueEvent(object : ValueEventListener {
+                            override fun onDataChange(snapshot: DataSnapshot) {
+                                if (snapshot.exists()) {
+                                    Toast.makeText(context, "$phone exists", Toast.LENGTH_SHORT).show()
+
+                                    val action = AuthFragmentDirections.actionAuthFragmentToUserProfileFragment(phoneCurrentUser)
+                                    findNavController().navigate(action)
+                                } else {
+                                    Toast.makeText(context, "$phone not exists", Toast.LENGTH_SHORT).show()
+                                    val action = AuthFragmentDirections.actionAuthFragmentToUpdateProfileFragment(phoneCurrentUser)
+                                    findNavController().navigate(action)
+                                }
+                            }
+
+                            override fun onCancelled(error: DatabaseError) {
+                                Toast.makeText(context, "Error occured!", Toast.LENGTH_SHORT).show()
+                            }
+                        })
+
 
                     }
                     .addOnFailureListener { e ->

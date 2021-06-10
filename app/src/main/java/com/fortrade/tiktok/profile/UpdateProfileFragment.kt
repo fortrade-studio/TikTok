@@ -187,7 +187,7 @@ class UpdateProfileFragment : Fragment() {
 
         val users = FirebaseAuth.getInstance().currentUser
         val ref =
-            FirebaseDatabase.getInstance().getReference("userProfileData").child(users.uid)
+            FirebaseDatabase.getInstance().getReference("userProfileData")
 
         val user = UserProfileData(
             fullName,
@@ -200,11 +200,12 @@ class UpdateProfileFragment : Fragment() {
             ProfileImageUrl
         )
 
-        ref.setValue(user)
+        ref.child(user.PhoneNumber).setValue(user)
             .addOnSuccessListener {
                 progressDialog.dismiss()
                 Toast.makeText(context, R.string.UploadData, Toast.LENGTH_LONG).show()
-                findNavController().navigate(R.id.action_updateProfileFragment_to_homeFragment)
+                val action = UpdateProfileFragmentDirections.actionUpdateProfileFragmentToUserProfileFragment(user.PhoneNumber)
+                findNavController().navigate(action)
             }
 
     }
@@ -254,7 +255,7 @@ class UpdateProfileFragment : Fragment() {
         }
         val users = FirebaseAuth.getInstance().currentUser
         val ref =
-            FirebaseDatabase.getInstance().getReference("userProfileData").child(users.uid)
+            FirebaseDatabase.getInstance().getReference("userProfileData")
 
         if (valid) {
                 progressDialog.show()
@@ -269,11 +270,12 @@ class UpdateProfileFragment : Fragment() {
                 null
             )
 
-            ref.setValue(user)
+            ref.child(user.PhoneNumber).setValue(user)
                 .addOnSuccessListener {
                     progressDialog.dismiss()
                     Toast.makeText(context, R.string.UploadData, Toast.LENGTH_LONG).show()
-                    findNavController().navigate(R.id.action_updateProfileFragment_to_homeFragment)
+                    val action = UpdateProfileFragmentDirections.actionUpdateProfileFragmentToUserProfileFragment(user.PhoneNumber)
+                    findNavController().navigate(action)
                 }
         }else{
             progressDialog.dismiss()

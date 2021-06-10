@@ -13,4 +13,13 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+
+    <style name="TabAppearance">
+        <item name="android:textSize">15sp</item>
+        <item name="android:layout_marginTop">50dp</item>
+    </style>
+
+    <style name="information_textview">
+
+    </style>
 </resources>
