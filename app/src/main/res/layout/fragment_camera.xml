@@ -30,9 +30,11 @@
         android:id="@+id/gallery"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="32dp"
+        android:layout_marginEnd="112dp"
         android:src="@drawable/ic_gallery"
         app:layout_constraintBottom_toBottomOf="@+id/cheptureVideo"
         app:layout_constraintEnd_toStartOf="@+id/cheptureVideo"
-        app:layout_constraintTop_toTopOf="@+id/cheptureVideo" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/cheptureVideo"
+        app:layout_constraintVertical_bias="0.586" />
 </androidx.constraintlayout.widget.ConstraintLayout>
