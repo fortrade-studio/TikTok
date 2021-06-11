@@ -6,10 +6,13 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.Button
 import android.widget.Toast
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.RecyclerView
 import com.fortrade.tiktok.R
+import com.fortrade.tiktok.profile.SharedViewModel
 import com.fortradestudio.custom.ProfileImagesViewGroup
 import com.fortradestudio.custom.RemoveButtonListener
+import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.item_gallery.view.*
 
 class GalleryAdapter(var imageUrl: List<String>, private val listener: OnItemClickListener) :
@@ -27,16 +30,18 @@ class GalleryAdapter(var imageUrl: List<String>, private val listener: OnItemCli
         init {
 
             itemView.gallery_image.setOnClickListener {
-                listener.onItemClick(adapterPosition)
+                listener.onItemClick(adapterPosition,0)
             }
+
         }
 
         override fun onClick(v: View?) {
             val position = adapterPosition
             if (position != RecyclerView.NO_POSITION) {
-                listener.onItemClick(position)
+                listener.onItemClick(position , 0)
             }
         }
+
     }
 
 
@@ -53,8 +58,9 @@ class GalleryAdapter(var imageUrl: List<String>, private val listener: OnItemCli
             holder.crossButton.setOnClickListener(object : RemoveButtonListener() {
                 override fun onClick(v: View?) {
                     super.onClick(v)
-                    Toast.makeText(holder.itemView.context, "Photo deleted!", Toast.LENGTH_SHORT)
-                        .show()
+                    if (position != RecyclerView.NO_POSITION) {
+                        listener.onItemClick(position , 1)
+                    }
 
                 }
             })
@@ -69,7 +75,7 @@ class GalleryAdapter(var imageUrl: List<String>, private val listener: OnItemCli
     }
 
     interface OnItemClickListener {
-        fun onItemClick(position: Int)
+        fun onItemClick(position: Int, status: Int)
     }
 
 
