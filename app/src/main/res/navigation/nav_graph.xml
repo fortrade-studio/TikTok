@@ -62,8 +62,9 @@
         android:label="UserProfileFragment">
         <argument
             android:name="userNumber"
-            android:defaultValue="1234567890"
-            app:argType="string" />
+        <action
+            android:id="@+id/action_userProfileFragment_to_updateProfileFragment"
+            app:destination="@id/updateProfileFragment" />
     </fragment>
 
 </navigation>
