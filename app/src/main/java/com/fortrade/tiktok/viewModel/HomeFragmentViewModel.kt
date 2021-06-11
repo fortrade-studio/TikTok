@@ -25,7 +25,7 @@ class HomeFragmentViewModel(
 
     val videos = ArrayList<VideoModel>()
     val segmentVideos = ArrayList<VideoModel>()
-    val n = 2
+    val n = 20
     var counter = 1;
     val dao = VideoDatabase.getDatabase(activity).getVideoDao()
     val ioScope = CoroutineScope(Dispatchers.IO)

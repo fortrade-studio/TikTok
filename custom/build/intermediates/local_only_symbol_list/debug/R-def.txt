@@ -11,11 +11,22 @@ color light_blue_600
 drawable add_image
 drawable ic_baseline_add_24
 drawable ic_baseline_close_24
+drawable ic_heart_fill_withbg
+drawable ic_heart_gill
+drawable ic_heart_unfill
+drawable ic_heart_unfill_withbg
+drawable ic_home
+drawable ic_home_withbg
+drawable ic_myprofile
+drawable ic_plus
+drawable ic_plus_withbg
 drawable ic_remove
+drawable ic_search
+drawable ic_share
+drawable ic_videoloading_placeholder
 drawable plus
 drawable pp
-id crossButton
-id gallery_image
+id auditionContentView
 layout sample
 style Widget.Theme.Audition.MyView
 styleable ProfileImagesViewGroup exampleString exampleDimension exampleColor exampleDrawable

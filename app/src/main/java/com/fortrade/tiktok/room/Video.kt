@@ -9,3 +9,9 @@ data class Video (
     @PrimaryKey(autoGenerate = true) val id:Int,
     @ColumnInfo(name = "VPI")val videoPublicId : String?=null
 )
+
+@Entity
+data class Liked(
+    @PrimaryKey(autoGenerate = true) val id:Int,
+    @ColumnInfo(name = "VPI")val videoPublicId : String?=null
+)

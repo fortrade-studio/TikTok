@@ -217,6 +217,10 @@ int attr chipStyle 0x0
 int attr chipSurfaceColor 0x0
 int attr circleRadius 0x0
 int attr circularProgressIndicatorStyle 0x0
+int attr civ_border_color 0x0
+int attr civ_border_overlay 0x0
+int attr civ_border_width 0x0
+int attr civ_circle_background_color 0x0
 int attr clickAction 0x0
 int attr clockFaceBackgroundColor 0x0
 int attr clockHandColor 0x0
@@ -1662,12 +1666,24 @@ int drawable design_snackbar_background 0x0
 int drawable ic_baseline_add_24 0x0
 int drawable ic_baseline_close_24 0x0
 int drawable ic_clock_black_24dp 0x0
+int drawable ic_heart_fill_withbg 0x0
+int drawable ic_heart_gill 0x0
+int drawable ic_heart_unfill 0x0
+int drawable ic_heart_unfill_withbg 0x0
+int drawable ic_home 0x0
+int drawable ic_home_withbg 0x0
 int drawable ic_keyboard_black_24dp 0x0
 int drawable ic_mtrl_checked_circle 0x0
 int drawable ic_mtrl_chip_checked_black 0x0
 int drawable ic_mtrl_chip_checked_circle 0x0
 int drawable ic_mtrl_chip_close_circle 0x0
+int drawable ic_myprofile 0x0
+int drawable ic_plus 0x0
+int drawable ic_plus_withbg 0x0
 int drawable ic_remove 0x0
+int drawable ic_search 0x0
+int drawable ic_share 0x0
+int drawable ic_videoloading_placeholder 0x0
 int drawable material_cursor_drawable 0x0
 int drawable material_ic_calendar_black_24dp 0x0
 int drawable material_ic_clear_black_24dp 0x0
@@ -1773,6 +1789,7 @@ int id animateToEnd 0x0
 int id animateToStart 0x0
 int id asConfigured 0x0
 int id async 0x0
+int id auditionContentView 0x0
 int id auto 0x0
 int id autoComplete 0x0
 int id autoCompleteToEnd 0x0
@@ -1805,7 +1822,6 @@ int id contiguous 0x0
 int id coordinator 0x0
 int id cos 0x0
 int id counterclockwise 0x0
-int id crossButton 0x0
 int id custom 0x0
 int id customPanel 0x0
 int id cut 0x0
@@ -1846,7 +1862,6 @@ int id flip 0x0
 int id floating 0x0
 int id forever 0x0
 int id fragment_container_view_tag 0x0
-int id gallery_image 0x0
 int id ghost_view 0x0
 int id ghost_view_holder 0x0
 int id gone 0x0
@@ -3410,6 +3425,11 @@ int styleable ChipGroup_chipSpacingVertical 3
 int styleable ChipGroup_selectionRequired 4
 int styleable ChipGroup_singleLine 5
 int styleable ChipGroup_singleSelection 6
+int[] styleable CircleImageView { 0x0, 0x0, 0x0, 0x0 }
+int styleable CircleImageView_civ_border_color 0
+int styleable CircleImageView_civ_border_overlay 1
+int styleable CircleImageView_civ_border_width 2
+int styleable CircleImageView_civ_circle_background_color 3
 int[] styleable CircularProgressIndicator { 0x0, 0x0, 0x0 }
 int styleable CircularProgressIndicator_indicatorDirectionCircular 0
 int styleable CircularProgressIndicator_indicatorInset 1

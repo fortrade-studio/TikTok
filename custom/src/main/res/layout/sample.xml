@@ -5,23 +5,35 @@
     android:layout_height="match_parent">
 
 
-    <com.fortradestudio.custom.ProfileImagesViewGroup
-        android:id="@+id/gallery_image"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/design_default_color_on_primary"
+    <com.fortradestudio.custom.AuditionContentView
+        android:id="@+id/auditionContentView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <Button
-            android:id="@+id/crossButton"
+        <VideoView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+
+        <androidx.appcompat.widget.AppCompatButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/ic_baseline_close_24"
-            android:visibility="gone" />
-    </com.fortradestudio.custom.ProfileImagesViewGroup>
+            android:background="@drawable/ic_heart_unfill_withbg"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="9 L"
+            android:textSize="18sp"
+            />
+
+
+    </com.fortradestudio.custom.AuditionContentView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

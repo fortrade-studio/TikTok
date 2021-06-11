@@ -218,6 +218,10 @@ attr chipStyle
 attr chipSurfaceColor
 attr circleRadius
 attr circularProgressIndicatorStyle
+attr civ_border_color
+attr civ_border_overlay
+attr civ_border_width
+attr civ_circle_background_color
 attr clickAction
 attr clockFaceBackgroundColor
 attr clockHandColor
@@ -1663,12 +1667,24 @@ drawable design_snackbar_background
 drawable ic_baseline_add_24
 drawable ic_baseline_close_24
 drawable ic_clock_black_24dp
+drawable ic_heart_fill_withbg
+drawable ic_heart_gill
+drawable ic_heart_unfill
+drawable ic_heart_unfill_withbg
+drawable ic_home
+drawable ic_home_withbg
 drawable ic_keyboard_black_24dp
 drawable ic_mtrl_checked_circle
 drawable ic_mtrl_chip_checked_black
 drawable ic_mtrl_chip_checked_circle
 drawable ic_mtrl_chip_close_circle
+drawable ic_myprofile
+drawable ic_plus
+drawable ic_plus_withbg
 drawable ic_remove
+drawable ic_search
+drawable ic_share
+drawable ic_videoloading_placeholder
 drawable material_cursor_drawable
 drawable material_ic_calendar_black_24dp
 drawable material_ic_clear_black_24dp
@@ -1774,6 +1790,7 @@ id animateToEnd
 id animateToStart
 id asConfigured
 id async
+id auditionContentView
 id auto
 id autoComplete
 id autoCompleteToEnd
@@ -1806,7 +1823,6 @@ id contiguous
 id coordinator
 id cos
 id counterclockwise
-id crossButton
 id custom
 id customPanel
 id cut
@@ -1847,7 +1863,6 @@ id flip
 id floating
 id forever
 id fragment_container_view_tag
-id gallery_image
 id ghost_view
 id ghost_view_holder
 id gone
@@ -3060,6 +3075,7 @@ styleable ButtonBarLayout allowStacking
 styleable CardView android_minHeight android_minWidth cardBackgroundColor cardCornerRadius cardElevation cardMaxElevation cardPreventCornerOverlap cardUseCompatPadding contentPadding contentPaddingBottom contentPaddingLeft contentPaddingRight contentPaddingTop
 styleable Chip android_checkable android_ellipsize android_maxWidth android_text android_textAppearance android_textColor android_textSize checkedIcon checkedIconEnabled checkedIconTint checkedIconVisible chipBackgroundColor chipCornerRadius chipEndPadding chipIcon chipIconEnabled chipIconSize chipIconTint chipIconVisible chipMinHeight chipMinTouchTargetSize chipStartPadding chipStrokeColor chipStrokeWidth chipSurfaceColor closeIcon closeIconEnabled closeIconEndPadding closeIconSize closeIconStartPadding closeIconTint closeIconVisible ensureMinTouchTargetSize hideMotionSpec iconEndPadding iconStartPadding rippleColor shapeAppearance shapeAppearanceOverlay showMotionSpec textEndPadding textStartPadding
 styleable ChipGroup checkedChip chipSpacing chipSpacingHorizontal chipSpacingVertical selectionRequired singleLine singleSelection
+styleable CircleImageView civ_border_color civ_border_overlay civ_border_width civ_circle_background_color
 styleable CircularProgressIndicator indicatorDirectionCircular indicatorInset indicatorSize
 styleable ClockFaceView clockFaceBackgroundColor clockNumberTextColor
 styleable ClockHandView clockHandColor materialCircleRadius selectorSize

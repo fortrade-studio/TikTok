@@ -15,4 +15,12 @@ class VideoRepository(val videoDao: VideoDao) {
     }
 
     fun getVideos()= videoDao.getVideos()
+
+    fun getLikedVideo(videoPublicID:String)  = videoDao.getLikeVideos(videoPublicID)
+
+    fun insertLikedVideo(videoPublicId: String) {
+        if (videoDao.getLikeVideos(videoPublicId).isEmpty()) {
+            videoDao.insertToLikedVideos(Liked(0,videoPublicId))
+        }
+    }
 }

@@ -18,4 +18,9 @@ interface VideoDao {
     @Query("Select * from video")
     fun getVideos():List<Video>
 
+    @Query("Select * from liked where liked.VPI=:videoPublicID")
+    fun getLikeVideos(videoPublicID:String):List<Liked>
+
+    @Insert
+    fun insertToLikedVideos(liked: Liked)
 }
