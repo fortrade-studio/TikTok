@@ -38,6 +38,8 @@ class UpdateProfileFragment : Fragment() {
         private const val TAG = "MainActivity"
     }
 
+
+
     lateinit var BirthDay: String
     var valid = true
     private lateinit var progressDialog: ProgressDialog
@@ -98,7 +100,7 @@ class UpdateProfileFragment : Fragment() {
             if (selectedProfileUri != null) {
 
                 uploadImageToFirebaseStorage()
-            }else{
+            } else {
                 saveUserProfileData()
             }
         }
@@ -204,7 +206,10 @@ class UpdateProfileFragment : Fragment() {
             .addOnSuccessListener {
                 progressDialog.dismiss()
                 Toast.makeText(context, R.string.UploadData, Toast.LENGTH_LONG).show()
-                val action = UpdateProfileFragmentDirections.actionUpdateProfileFragmentToUserProfileFragment(user.PhoneNumber)
+                val action =
+                    UpdateProfileFragmentDirections.actionUpdateProfileFragmentToUserProfileFragment(
+                        user.PhoneNumber
+                    )
                 findNavController().navigate(action)
             }
 
@@ -258,7 +263,7 @@ class UpdateProfileFragment : Fragment() {
             FirebaseDatabase.getInstance().getReference("userProfileData")
 
         if (valid) {
-                progressDialog.show()
+            progressDialog.show()
             val user = UserProfileData(
                 fullName,
                 username,
@@ -274,10 +279,13 @@ class UpdateProfileFragment : Fragment() {
                 .addOnSuccessListener {
                     progressDialog.dismiss()
                     Toast.makeText(context, R.string.UploadData, Toast.LENGTH_LONG).show()
-                    val action = UpdateProfileFragmentDirections.actionUpdateProfileFragmentToUserProfileFragment(user.PhoneNumber)
+                    val action =
+                        UpdateProfileFragmentDirections.actionUpdateProfileFragmentToUserProfileFragment(
+                            user.PhoneNumber
+                        )
                     findNavController().navigate(action)
                 }
-        }else{
+        } else {
             progressDialog.dismiss()
             Toast.makeText(context, R.string.dataValid, Toast.LENGTH_LONG).show()
         }
