@@ -18,7 +18,7 @@ class VideosDiffUtils(
     }
 
     override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        return oldList[oldItemPosition].videoUrl == newList[newItemPosition].videoUrl
+        return oldList[oldItemPosition].uniqueVideoId == newList[newItemPosition].uniqueVideoId
     }
 
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {

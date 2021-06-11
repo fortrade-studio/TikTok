@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.viewpager2.widget.ViewPager2
 import com.fortrade.tiktok.utils.getVideoId
 import com.fortrade.tiktok.viewModel.HomeFragmentViewModel
@@ -18,13 +19,19 @@ import com.fortradestudio.custom.RemoveButtonListener
 import com.leeladher.video.VideoAdapter
 import com.leeladher.video.VideoModel
 import kotlinx.android.synthetic.main.fragment_home.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.DisposableHandle
+import kotlinx.coroutines.launch
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment()  , SwipeRefreshLayout.OnRefreshListener {
 
     var arrVideoModel = ArrayList<VideoModel>()
     lateinit var videoAdapter: VideoAdapter
     private lateinit var viewPager2: ViewPager2
     private lateinit var Upload: Button
+    private lateinit var swipeRefreshListener:SwipeRefreshLayout
+    private val mainScope = CoroutineScope(Dispatchers.Main)
 
 
     private lateinit var homeFragmentViewModel: HomeFragmentViewModel
@@ -42,7 +49,9 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val data = requireActivity().intent.data
+        swipeRefreshListener = view.findViewById<SwipeRefreshLayout>(R.id.swipeRefreshLayout)
 
+        swipeRefreshListener.setOnRefreshListener(this)
 
         if(data!=null){
             // user navigate through dynamic link
@@ -61,18 +70,32 @@ class HomeFragment : Fragment() {
         Upload = view.findViewById(R.id.Upload)
 
         viewPager2 = view.findViewById(R.id.viewPager)
-        videoAdapter = VideoAdapter(arrVideoModel)
+        videoAdapter = VideoAdapter(arrVideoModel, requireContext())
         viewPager2.adapter = videoAdapter
 
-
-        homeFragmentViewModel.getVideos {
-            videoAdapter.updateVideoList(it)
+        videoAdapter.setLoadMoreAction {
+            homeFragmentViewModel.inflateSegment {
+                mainScope.launch {
+                    videoAdapter.updateVideoList(it)
+                }
+            }
         }
+
+        homeFragmentViewModel.getVideos( {mainScope.launch {
+            videoAdapter.updateVideoList(it)
+        }})
 
         Upload.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_cameraFragment)
         }
 
+    }
+
+    override fun onRefresh() {
+        homeFragmentViewModel.getVideos({mainScope.launch {
+            videoAdapter.updateVideoList(it)
+        }},true)
+        swipeRefreshListener.isRefreshing = false
     }
 
 }
