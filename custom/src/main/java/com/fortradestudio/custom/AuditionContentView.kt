@@ -34,7 +34,7 @@ class AuditionContentView @JvmOverloads constructor(
         val left = width - width/5;
         val top = height/1.34421858
         val bottom = height - height/7
-        val mid = left + (width - left)/3.8
+        val mid = left + (width - left)/4.2
 
         val likeBtn = children.elementAt(1)
         likeBtn.layout(left,top.toInt(),width,bottom)
