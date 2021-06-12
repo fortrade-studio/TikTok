@@ -38,8 +38,7 @@
             android:id="@+id/action_updateProfileFragment_to_userProfileFragment"
             app:destination="@id/userProfileFragment" />
         <argument
-            android:name="userNumber"
-            app:argType="string" />
+            android:name="userNumber" />
     </fragment>
 
     <fragment
@@ -47,9 +46,14 @@
         android:name="com.fortrade.tiktok.HomeFragment"
         android:label="fragment_show_video"
         tools:layout="@layout/fragment_home">
+        <argument
+            android:name="userNumber" />
         <action
             android:id="@+id/action_homeFragment_to_cameraFragment"
             app:destination="@id/cameraFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_userProfileFragment"
+            app:destination="@id/userProfileFragment" />
     </fragment>
     <fragment
         android:id="@+id/cameraFragment"
@@ -61,7 +65,7 @@
         android:name="com.fortrade.tiktok.profile.UserProfileFragment"
         android:label="UserProfileFragment">
         <argument
-            android:name="userNumber"
+            android:name="userNumber" />
         <action
             android:id="@+id/action_userProfileFragment_to_updateProfileFragment"
             app:destination="@id/updateProfileFragment" />

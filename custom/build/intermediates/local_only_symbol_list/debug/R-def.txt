@@ -14,8 +14,6 @@ drawable ic_baseline_close_24
 drawable ic_remove
 drawable plus
 drawable pp
-id crossButton
-id gallery_image
 layout sample
 style Widget.Theme.Audition.MyView
 styleable ProfileImagesViewGroup exampleString exampleDimension exampleColor exampleDrawable

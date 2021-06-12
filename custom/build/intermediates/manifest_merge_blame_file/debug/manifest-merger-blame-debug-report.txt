@@ -6,8 +6,8 @@
 6
 7    <uses-sdk
 8        android:minSdkVersion="19"
-8-->/Users/ashwin/AndroidStudioProjects/AuditionApp/custom/src/main/AndroidManifest.xml
+8-->C:\Users\Suryakant Tyagi\AndroidStudioProjects\TikTok-2\custom\src\main\AndroidManifest.xml
 9        android:targetSdkVersion="30" />
-9-->/Users/ashwin/AndroidStudioProjects/AuditionApp/custom/src/main/AndroidManifest.xml
+9-->C:\Users\Suryakant Tyagi\AndroidStudioProjects\TikTok-2\custom\src\main\AndroidManifest.xml
 10
 11</manifest>

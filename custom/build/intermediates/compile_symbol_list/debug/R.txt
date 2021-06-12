@@ -1805,7 +1805,6 @@ int id contiguous 0x0
 int id coordinator 0x0
 int id cos 0x0
 int id counterclockwise 0x0
-int id crossButton 0x0
 int id custom 0x0
 int id customPanel 0x0
 int id cut 0x0
@@ -1846,7 +1845,6 @@ int id flip 0x0
 int id floating 0x0
 int id forever 0x0
 int id fragment_container_view_tag 0x0
-int id gallery_image 0x0
 int id ghost_view 0x0
 int id ghost_view_holder 0x0
 int id gone 0x0
