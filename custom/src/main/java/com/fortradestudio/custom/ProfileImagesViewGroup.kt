@@ -230,7 +230,7 @@ class ProfileImagesViewGroup @JvmOverloads constructor(
         }
     }
 
-    fun removeCross(){
+    private fun removeCross(){
         val first = this@ProfileImagesViewGroup.children.first()
         if (first is Button) {
             // we can show or hide it accordingly

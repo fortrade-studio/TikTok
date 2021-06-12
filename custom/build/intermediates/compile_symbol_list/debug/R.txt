@@ -1667,7 +1667,9 @@ int drawable ic_mtrl_checked_circle 0x0
 int drawable ic_mtrl_chip_checked_black 0x0
 int drawable ic_mtrl_chip_checked_circle 0x0
 int drawable ic_mtrl_chip_close_circle 0x0
+int drawable ic_no_sound 0x0
 int drawable ic_remove 0x0
+int drawable ic_volume_up 0x0
 int drawable material_cursor_drawable 0x0
 int drawable material_ic_calendar_black_24dp 0x0
 int drawable material_ic_clear_black_24dp 0x0

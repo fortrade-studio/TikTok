@@ -125,11 +125,25 @@ class VideoAdapter(arrVideo:ArrayList<VideoModel>,val context:Context) : Recycle
 
             }
 
+            var state:Boolean = false
             itemView.videoView.setVideoPath(videoModel.videoUrl)
             itemView.videoView.setOnPreparedListener(object :MediaPlayer.OnPreparedListener{
                 override fun onPrepared(mp: MediaPlayer) {
                     itemView.progressBar.visibility = View.GONE
                     mp.start()
+
+                    itemView.videoView.setOnClickListener {
+                        state = if (!state){
+                            mp.setVolume(0f,0f)
+                            itemView.auditionContentView.mute(true)
+                            true
+                        }else{
+                            mp.setVolume(1f,1f)
+                            itemView.auditionContentView.mute(false)
+                            false
+                        }
+
+                    }
 
                 }
 
