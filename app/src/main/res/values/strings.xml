@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">Audition</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello clips fragment</string>
+
+    <!-- AuthFragment strings here-->
+    <string name="signed_in">Already Signed In </string>
+
+
+    <!-- update profile fragments here -->
+
+    <string name="wrongUserName">UserName should be at least 4 character</string>
+    <string name="ValidBio">Max limit 150</string>
+    <string name="Error">Error</string>
+    <string name="dataValid">please enter valid data</string>
+    <string name="UploadData">UploadData</string>
+    <string name="databaseRef">userProfileData</string>
+    <string name="ValidNumber">Enter Valid Number</string>
+    <string name="uploadSuccess">Successfully upload</string>
+    <string name="imageNotSelect">Please Select Image</string>
+    <string name="PleaseWait">Please Wait</string>
+    <string name="birthday">Please Select Birthday</string>
+
+    <string name="PleaseEnterotp">Please Enter OTP</string>
+    <string name="PhoneNomber">Please Enter Phone Number </string>
+    <string name="CodeSend">Verification Code Send</string>
+    <string name="user_profile">User Profile</string>
+    <string name="hello_gallery_fragment">hello gallery fragment</string>
+
+    <string name="Next">Next</string>
+
+
+</resources>

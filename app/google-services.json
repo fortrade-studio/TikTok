@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "267840868363",
+    "project_id": "tik-tok-463a0",
+    "storage_bucket": "tik-tok-463a0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:267840868363:android:0034beed36a5128b6bf70e",
+        "android_client_info": {
+          "package_name": "com.fortrade.tiktok"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "267840868363-8didblrpfjdu04phpcdqbrd5uagjjvgc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAwY4u_HRVLS3ItK4rLAx8eQixwMHIKqjM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "267840868363-8didblrpfjdu04phpcdqbrd5uagjjvgc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
