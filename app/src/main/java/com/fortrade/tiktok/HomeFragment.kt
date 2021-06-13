@@ -24,10 +24,12 @@ import androidx.navigation.fragment.findNavController
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.viewpager2.widget.ViewPager2
 import com.fortrade.tiktok.authentication.AuthFragmentDirections
+import com.fortrade.tiktok.utils.Constants
 import com.fortrade.tiktok.utils.getVideoId
 import com.fortrade.tiktok.viewModel.HomeFragmentViewModel
 import com.fortrade.tiktok.viewModel.HomeFragmentViewModelFactory
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionDeniedResponse
@@ -74,12 +76,6 @@ class HomeFragment : Fragment() ,SwipeRefreshLayout.OnRefreshListener{
         swipeRefreshListener = view.findViewById(R.id.frameLayout)
         swipeRefreshListener.setOnRefreshListener(this)
 
-        if(data!=null){
-            // user navigate through dynamic link
-            val videoId = getVideoId(data.toString())
-            Toast.makeText(requireContext(), videoId, Toast.LENGTH_SHORT).show()
-        }
-
 
         homeFragmentViewModel = ViewModelProvider(
             this, HomeFragmentViewModelFactory(
@@ -88,9 +84,25 @@ class HomeFragment : Fragment() ,SwipeRefreshLayout.OnRefreshListener{
             )
         ).get(HomeFragmentViewModel::class.java)
 
-        Upload = view.findViewById(R.id.Upload)
 
+        if(data!=null){
+            // user navigate through dynamic link
+            val videoId = getVideoId(data.toString())
+            FirebaseDatabase.getInstance()
+                .getReference(Constants.content)
+                .child(Constants.general)
+                .child(videoId)
+                .get().addOnSuccessListener {
+                    val value = it.getValue(VideoModel::class.java)
+                    value?.let { it1 -> arrVideoModel.add(it1) }
+                }
+            Toast.makeText(requireContext(), videoId, Toast.LENGTH_SHORT).show()
+        }
+
+
+        Upload = view.findViewById(R.id.Upload)
         viewPager2 = view.findViewById(R.id.viewPager)
+
         videoAdapter = VideoAdapter(arrVideoModel, requireContext())
         viewPager2.adapter = videoAdapter
 

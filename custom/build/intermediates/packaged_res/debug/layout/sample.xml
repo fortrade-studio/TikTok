@@ -5,30 +5,49 @@
     android:layout_height="match_parent">
 
     <com.fortradestudio.custom.AuditionContentView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:id="@+id/auditionContentView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <VideoView
             android:layout_width="0dp"
-            android:layout_height="0dp"/>
+            android:layout_height="0dp" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_heart_fill_withbg" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="10929"
-            />
+            android:text="10929" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/ic_no_sound"
-            android:visibility="gone"
-            />
+            android:background="@drawable/ic_no_sound" />
 
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_share_fill" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/pp"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="aryeahtyagi"
+            android:textSize="18sp"
+            />
 
     </com.fortradestudio.custom.AuditionContentView>
 

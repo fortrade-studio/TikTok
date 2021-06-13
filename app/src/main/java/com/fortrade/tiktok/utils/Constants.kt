@@ -8,4 +8,6 @@ object Constants {
     const val videoUrl:String = "videoUrl"
     const val videoUploaderUsername:String = "videoUploaderUsername"
     const val likes:String = "likes"
+    const val userProfileData = "userProfileData"
+    const val linkPrefix = "https://www.atria.com?"
 }
