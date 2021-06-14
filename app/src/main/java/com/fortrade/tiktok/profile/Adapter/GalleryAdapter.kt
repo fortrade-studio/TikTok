@@ -20,7 +20,10 @@ import com.google.firebase.database.FirebaseDatabase
 import com.leeladher.video.VideoModel
 import kotlinx.android.synthetic.main.item_gallery.view.*
 
-class GalleryAdapter(var imageUrl: ArrayList<String>, private val listener: OnItemClickListener) :
+class GalleryAdapter(
+    var imageUrl: ArrayList<String>, private val listener: OnItemClickListener,
+    val isUserProfile: Boolean = true
+) :
     RecyclerView.Adapter<GalleryAdapter.GalleryViewHolder>() {
 
     companion object {
@@ -33,19 +36,24 @@ class GalleryAdapter(var imageUrl: ArrayList<String>, private val listener: OnIt
         val crossButton: Button = itemView.crossButton
 
         init {
-            itemView.gallery_image.setOnClickListener {
-                listener.onItemClick(adapterPosition,0)
+            if (isUserProfile) {
+                itemView.gallery_image.setOnClickListener {
+                    listener.onItemClick(adapterPosition, 0)
+                }
             }
         }
 
         override fun onClick(v: View?) {
-            val position = adapterPosition
-            if (position != RecyclerView.NO_POSITION) {
-                listener.onItemClick(position , 0)
+            if (isUserProfile) {
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    listener.onItemClick(position, 0)
+                }
             }
         }
 
     }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GalleryViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_gallery, parent, false)
         return GalleryViewHolder(view)
@@ -53,19 +61,22 @@ class GalleryAdapter(var imageUrl: ArrayList<String>, private val listener: OnIt
 
     override fun onBindViewHolder(holder: GalleryViewHolder, position: Int) {
 
-        if (imageUrl.size > position && imageUrl[position]!=null) {
+        if (imageUrl.size > position && imageUrl[position] != null) {
             val curImage = imageUrl[position]
             Log.i(TAG, "onBindViewHolder: $curImage")
-            holder.itemView.gallery_image.setBitmapViaUrl(curImage)
-            holder.crossButton.setOnClickListener(object : RemoveButtonListener() {
-                override fun onClick(v: View?) {
-                    super.onClick(v)
-                    if (position != RecyclerView.NO_POSITION) {
-                        listener.onItemClick(position , 1)
-                    }
+            holder.itemView.gallery_image
+                .setBitmapViaUrl(curImage)
+            if(isUserProfile) {
+                holder.crossButton.setOnClickListener(object : RemoveButtonListener() {
+                    override fun onClick(v: View?) {
+                        super.onClick(v)
+                        if (position != RecyclerView.NO_POSITION) {
+                            listener.onItemClick(position, 1)
+                        }
 
-                }
-            })
+                    }
+                })
+            }
         } else {
 
         }
@@ -73,7 +84,7 @@ class GalleryAdapter(var imageUrl: ArrayList<String>, private val listener: OnIt
     }
 
     override fun getItemCount(): Int {
-        return 8
+        return if (isUserProfile) 8 else imageUrl.size
     }
 
     interface OnItemClickListener {

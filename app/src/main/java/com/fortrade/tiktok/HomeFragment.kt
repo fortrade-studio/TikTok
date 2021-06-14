@@ -124,8 +124,8 @@ class HomeFragment : Fragment() ,SwipeRefreshLayout.OnRefreshListener{
         val navigate = view.findViewById<Button>(R.id.navigate)
         navigate.setOnClickListener {
             val phoneNumber = FirebaseAuth.getInstance().currentUser.phoneNumber.removePrefix("+91")
-            Log.i(TAG, "onViewCreated: $phoneNumber")
-            val action = HomeFragmentDirections.actionHomeFragmentToUserProfileFragment(phoneNumber)
+            Log.i(TAG, "onViewCreated: ")
+            val action = HomeFragmentDirections.actionHomeFragmentToUserProfileFragment("1234567890")
             findNavController().navigate(action)
         }
 

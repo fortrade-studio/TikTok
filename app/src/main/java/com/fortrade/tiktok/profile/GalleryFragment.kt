@@ -17,6 +17,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
+import com.fortrade.tiktok.HomeFragmentArgs
 import com.fortrade.tiktok.R
 import com.fortrade.tiktok.databinding.FragmentGalleryBinding
 import com.fortrade.tiktok.profile.Adapter.GalleryAdapter
@@ -36,22 +37,24 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-class GalleryFragment : Fragment(), GalleryAdapter.OnItemClickListener {
+class GalleryFragment(
+    val number : String=FirebaseAuth.getInstance().currentUser.phoneNumber.removePrefix("+91")
+) : Fragment(), GalleryAdapter.OnItemClickListener {
 
-    private val sharedViewModel: SharedViewModel by activityViewModels()
-    val phoneNumber: String = FirebaseAuth.getInstance().currentUser.phoneNumber.removePrefix("+91")
-
-
+    val phone=FirebaseAuth.getInstance().currentUser.phoneNumber.removePrefix("+91")
     var images = ArrayList<String>()
 
     private lateinit var progressDialog: ProgressDialog
 
-    val galleryAdapter = GalleryAdapter(images, this)
+    lateinit var galleryAdapter :GalleryAdapter
     var selectedImageUri: Uri? = null
     var imagePosition: Int = -1
 
     lateinit var galleryViewModel: GalleryFragmentViewModel
 
+    companion object{
+        private const val TAG = "GalleryFragment"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,18 +71,43 @@ class GalleryFragment : Fragment(), GalleryAdapter.OnItemClickListener {
 
     override fun onViewCreated(itemView: View, savedInstanceState: Bundle?) {
         super.onViewCreated(itemView, savedInstanceState)
+
         galleryViewModel = ViewModelProvider(this,GalleryFragmentViewModelFactory(requireActivity(),requireView())).get(GalleryFragmentViewModel::class.java)
 
-        recycler_view_item.adapter = galleryAdapter
-        recycler_view_item.layoutManager = GridLayoutManager(activity, 3)
-        fetchDataFromFirebase()
-        progressDialog = ProgressDialog(context)
-        progressDialog.setMessage("Please Wait")
-        progressDialog.setCanceledOnTouchOutside(false)
+        if(number==phone){
+            galleryAdapter=GalleryAdapter(images, this,true)
+            // user profile
+            recycler_view_item.adapter = galleryAdapter
+            recycler_view_item.layoutManager = GridLayoutManager(activity, 3)
+            fetchDataFromFirebase()
+            progressDialog = ProgressDialog(context)
+            progressDialog.setMessage("Please Wait")
+            progressDialog.setCanceledOnTouchOutside(false)
 
-        galleryViewModel.getImages {
-            galleryAdapter.imageUrl = ArrayList(it)
-            galleryAdapter.notifyDataSetChanged()
+            galleryViewModel.getImages( {
+                galleryAdapter.imageUrl = ArrayList(it)
+                galleryAdapter.notifyDataSetChanged()
+            },number)
+
+        }
+        else{
+
+            galleryAdapter=GalleryAdapter(images, this,false)
+            // user profile
+            recycler_view_item.adapter = galleryAdapter
+            recycler_view_item.layoutManager = GridLayoutManager(activity, 3)
+            fetchDataFromFirebase()
+            progressDialog = ProgressDialog(context)
+            progressDialog.setMessage("Please Wait")
+            progressDialog.setCanceledOnTouchOutside(false)
+
+            galleryViewModel.getImages( {
+                galleryAdapter.imageUrl = ArrayList(it).filter {
+                    it!=null
+                } as ArrayList<String>
+                galleryAdapter.notifyDataSetChanged()
+            },number)
+
         }
 
 
@@ -97,7 +125,7 @@ class GalleryFragment : Fragment(), GalleryAdapter.OnItemClickListener {
             Toast.makeText(context, "Photo deleted!", Toast.LENGTH_SHORT).show()
             val ref =
                 FirebaseDatabase.getInstance().getReference("userProfileData")
-                    .child(phoneNumber)
+                    .child(number)
                     .child("UserImages")
                     .child(position.toString())
             ref.removeValue()
@@ -135,7 +163,7 @@ class GalleryFragment : Fragment(), GalleryAdapter.OnItemClickListener {
                         //Save Data into Firebase Database
                         val ref =
                             FirebaseDatabase.getInstance().getReference("userProfileData")
-                                .child(phoneNumber)
+                                .child(number)
                                 .child("UserImages")
                                 .child(imagePosition.toString())
 

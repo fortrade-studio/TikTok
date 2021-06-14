@@ -127,8 +127,8 @@ class UserProfileFragment : Fragment() {
 
         // LoginFragment is the name of Fragment and the Login
         // is a title of tab
-        adapter.addFragment(GalleryFragment())
-        adapter.addFragment(ClipsFragment())
+        adapter.addFragment(GalleryFragment(args.userNumber))
+        adapter.addFragment(ClipsFragment(args.userNumber))
 
         // setting adapter to view pager.
         viewpager.setAdapter(adapter)
