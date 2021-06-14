@@ -68,10 +68,12 @@ class UserProfileFragment : Fragment() {
                 val username = it.child("userName").value
                 val bio = it.child("bio").value
                 val profileImage = it.child("profileImageUrl").value
+                val realName = it.child("fullName").value
 
                 view.username_textview.text = username.toString()
                 view.bio_textview.text = bio.toString()
                 Picasso.with(activity).load(profileImage.toString()).into(view.user_photo)
+                view.full_name.text = realName.toString()
 
             } else {
 
@@ -110,6 +112,10 @@ class UserProfileFragment : Fragment() {
 
         fb.setOnClickListener {
             Toast.makeText(context, "Facebook", Toast.LENGTH_SHORT).show()
+        }
+
+        profile_back_button.setOnClickListener {
+            Toast.makeText(context, "Back button pressed!", Toast.LENGTH_SHORT).show()
         }
 
 
