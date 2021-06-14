@@ -16,6 +16,7 @@ drawable ic_no_sound
 drawable ic_remove
 drawable ic_share_fill
 drawable ic_volume_up
+drawable placeholder_add
 drawable plus
 drawable pp
 id auditionContentView

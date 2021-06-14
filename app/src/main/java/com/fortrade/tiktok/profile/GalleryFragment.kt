@@ -13,13 +13,17 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import com.fortrade.tiktok.R
 import com.fortrade.tiktok.databinding.FragmentGalleryBinding
 import com.fortrade.tiktok.profile.Adapter.GalleryAdapter
+import com.fortrade.tiktok.viewModel.GalleryFragmentViewModel
+import com.fortrade.tiktok.viewModel.GalleryFragmentViewModelFactory
 import com.google.firebase.FirebaseError
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
@@ -29,23 +33,24 @@ import kotlinx.android.synthetic.main.fragment_gallery.*
 import kotlinx.android.synthetic.main.fragment_user_profile.*
 import kotlinx.android.synthetic.main.fragment_user_profile.view.*
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 class GalleryFragment : Fragment(), GalleryAdapter.OnItemClickListener {
 
     private val sharedViewModel: SharedViewModel by activityViewModels()
-    lateinit var phoneNumber: String
+    val phoneNumber: String = FirebaseAuth.getInstance().currentUser.phoneNumber.removePrefix("+91")
 
 
-    var images = mutableListOf(
-        "http://aryeahtyagi.herokuapp.com/me.jpg"
-    )
+    var images = ArrayList<String>()
 
     private lateinit var progressDialog: ProgressDialog
 
     val galleryAdapter = GalleryAdapter(images, this)
     var selectedImageUri: Uri? = null
     var imagePosition: Int = -1
+
+    lateinit var galleryViewModel: GalleryFragmentViewModel
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,15 +62,13 @@ class GalleryFragment : Fragment(), GalleryAdapter.OnItemClickListener {
         savedInstanceState: Bundle?
     ): View? {
         val view: View = inflater.inflate(R.layout.fragment_gallery, container, false)
-
-
         return view
     }
 
 
     override fun onViewCreated(itemView: View, savedInstanceState: Bundle?) {
         super.onViewCreated(itemView, savedInstanceState)
-
+        galleryViewModel = ViewModelProvider(this,GalleryFragmentViewModelFactory(requireActivity(),requireView())).get(GalleryFragmentViewModel::class.java)
 
         recycler_view_item.adapter = galleryAdapter
         recycler_view_item.layoutManager = GridLayoutManager(activity, 3)
@@ -73,6 +76,12 @@ class GalleryFragment : Fragment(), GalleryAdapter.OnItemClickListener {
         progressDialog = ProgressDialog(context)
         progressDialog.setMessage("Please Wait")
         progressDialog.setCanceledOnTouchOutside(false)
+
+        galleryViewModel.getImages {
+            galleryAdapter.imageUrl = ArrayList(it)
+            galleryAdapter.notifyDataSetChanged()
+        }
+
 
     }
 
@@ -83,7 +92,7 @@ class GalleryFragment : Fragment(), GalleryAdapter.OnItemClickListener {
             intent.type = "image/*"
             startActivityForResult(intent, 82)
         } else if (status == 1) {
-            images.removeAt(position)
+            galleryAdapter.imageUrl.removeAt(position)
             galleryAdapter.notifyDataSetChanged()
             Toast.makeText(context, "Photo deleted!", Toast.LENGTH_SHORT).show()
             val ref =
@@ -99,7 +108,7 @@ class GalleryFragment : Fragment(), GalleryAdapter.OnItemClickListener {
 
     private fun fetchDataFromFirebase() {
 
-        images.removeAt(0)
+
         progressDialog = ProgressDialog(context)
         progressDialog.setMessage("Loading profile...")
         progressDialog.setCanceledOnTouchOutside(false)
@@ -116,10 +125,6 @@ class GalleryFragment : Fragment(), GalleryAdapter.OnItemClickListener {
             progressDialog.setMessage("Uploading Your Image...")
             progressDialog.show()
             selectedImageUri = data.data
-            sharedViewModel.userPhoneNumber.observe(viewLifecycleOwner, { userPhoneNumber ->
-                phoneNumber = userPhoneNumber
-
-            })
 
             val filename = UUID.randomUUID().toString()
             val ref = FirebaseStorage.getInstance().getReference("/images/$filename")
@@ -137,7 +142,7 @@ class GalleryFragment : Fragment(), GalleryAdapter.OnItemClickListener {
                         val imageUrl = it.toString()
                         ref.setValue(it.toString()).addOnSuccessListener {
 
-                            images.add(imageUrl)
+                            galleryAdapter.imageUrl.add(imageUrl)
                             galleryAdapter.notifyDataSetChanged()
                             progressDialog.dismiss()
 

@@ -82,7 +82,7 @@ class AuditionContentView @JvmOverloads constructor(
         usernameTextView.layout(
             width / 5.9.toInt(),
             (height - height / 4.8).toInt(),
-            width / 2,
+            mid.toInt(),
             height - height / 6
         )
     }

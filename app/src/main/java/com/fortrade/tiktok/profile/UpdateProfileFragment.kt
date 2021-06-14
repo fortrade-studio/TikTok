@@ -104,7 +104,6 @@ class UpdateProfileFragment : Fragment() {
         val radio: RadioButton? = view?.findViewById(binding.gender.checkedRadioButtonId)
         val fullName = binding.name.editableText.toString()
         val username = binding.userName.editableText.toString()
-        val phoneNumber = binding.phone.editableText.toString()
         val Bio = binding.bio.editableText.toString()
         val website = binding.website.editableText.toString()
         val gender = "${radio?.text}"
@@ -113,15 +112,15 @@ class UpdateProfileFragment : Fragment() {
         checkField(binding.bio)
 
 
-        if (TextUtils.isEmpty(phoneNumber)) {
-            progressDialog.dismiss()
-            binding.phone.error = "Enter Valid Number"
-            binding.phone.requestFocus()
-            return
-        }
         if (username.length < 4) {
             progressDialog.dismiss()
             binding.userName.error = "UserName should be at least 4 character"
+            binding.userName.requestFocus()
+            return
+        }
+        if(username.length > 32){
+            progressDialog.dismiss()
+            binding.userName.error = "UserName should be less than 32 character"
             binding.userName.requestFocus()
             return
         }
@@ -175,19 +174,18 @@ class UpdateProfileFragment : Fragment() {
 
         val fullName = binding.name.editableText.toString()
         val username = binding.userName.editableText.toString()
-        val phoneNumber = binding.phone.editableText.toString()
         val Bio = binding.bio.editableText.toString()
         val website = binding.website.editableText.toString()
         val gender = "${radio?.text}"
 
-        val users = FirebaseAuth.getInstance().currentUser
+        val users = FirebaseAuth.getInstance().currentUser as FirebaseUser
         val ref =
             FirebaseDatabase.getInstance().getReference("userProfileData")
 
         val user = UserProfileData(
             fullName,
             username,
-            phoneNumber,
+            users.phoneNumber!!,
             Bio,
             website,
             gender,
@@ -214,17 +212,10 @@ class UpdateProfileFragment : Fragment() {
 
         val fullName = binding.name.editableText.toString()
         val username = binding.userName.editableText.toString()
-        val phoneNumber = binding.phone.editableText.toString()
         val Bio = binding.bio.editableText.toString()
         val website = binding.website.editableText.toString()
         val gender = "${radio?.text}"
 
-        if (TextUtils.isEmpty(phoneNumber)) {
-            progressDialog.dismiss()
-            binding.phone.error = "Enter Valid Number"
-            binding.phone.requestFocus()
-            return
-        }
         if (username.length < 4) {
             progressDialog.dismiss()
             binding.userName.error = "UserName should be at least 4 character"
@@ -251,7 +242,7 @@ class UpdateProfileFragment : Fragment() {
             ).show()
             return
         }
-        val users = FirebaseAuth.getInstance().currentUser
+        val users = FirebaseAuth.getInstance().currentUser as FirebaseUser
         val ref =
             FirebaseDatabase.getInstance().getReference("userProfileData")
 
@@ -260,7 +251,7 @@ class UpdateProfileFragment : Fragment() {
             val user = UserProfileData(
                 fullName,
                 username,
-                phoneNumber,
+                users.phoneNumber!!,
                 Bio,
                 website,
                 gender,

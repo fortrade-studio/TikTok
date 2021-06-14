@@ -68,7 +68,7 @@ class ProfileImagesViewGroup @JvmOverloads constructor(
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
         val first = this.children.first()
         if(first is AppCompatButton){
-            first.layout(width - 70, 0, width, 70)
+            first.layout(width-width/3, 0, width-width/5, 70)
         }else{
             throw Exception("Button Type For ProfileImagesViewGroup must be AppCompatButton located at index 0 of child tree")
         }
@@ -118,7 +118,7 @@ class ProfileImagesViewGroup @JvmOverloads constructor(
     override fun onDraw(c: Canvas?) {
         if (bit != null) {
             c?.drawColor(Color.WHITE)
-            val scalex= width/(bit.width.toFloat()+12)
+            val scalex= width/(bit.width.toFloat()+bit.width.toFloat()/4)
             val scaley = height/bit.height.toFloat()
             m.setScale(scalex,scaley,0f,0f)
             canvas.drawRoundRect(0f, 0f, width.toFloat(), height.toFloat(), 15f, 15f, paint)
@@ -141,7 +141,7 @@ class ProfileImagesViewGroup @JvmOverloads constructor(
         }
     }
 
-    private var bit: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.plus)
+    private var bit: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.placeholder_add)
 
     private var isDelete = false
 

@@ -38,7 +38,7 @@ class ClipsAdapter(
     }
 
     fun dispatchUpdates(newList: List<VideoModel>) {
-        val videoUtilsCallback = ClipDiffUtils(newList, videoList)
+        val videoUtilsCallback = ClipDiffUtils(videoList,newList)
         val diff = DiffUtil.calculateDiff(videoUtilsCallback)
         videoList.clear()
         videoList.addAll(newList)
