@@ -224,4 +224,23 @@ class ProfileImagesViewGroup @JvmOverloads constructor(
         }
     }
 
+    override fun onWindowFocusChanged(hasWindowFocus: Boolean) {
+        if(!hasWindowFocus){
+            removeCross()
+        }
+    }
+
+    private fun removeCross(){
+        val first = this@ProfileImagesViewGroup.children.first()
+        if (first is Button) {
+            // we can show or hide it accordingly
+            when (first.visibility) {
+                View.VISIBLE -> {
+                    groove(false)
+                    first.visibility = View.GONE
+                }
+            }
+        }
+    }
+
 }

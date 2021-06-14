@@ -28,7 +28,6 @@ class GalleryAdapter(var imageUrl: List<String>, private val listener: OnItemCli
         val crossButton: Button = itemView.crossButton
 
         init {
-
             itemView.gallery_image.setOnClickListener {
                 listener.onItemClick(adapterPosition,0)
             }
@@ -53,6 +52,7 @@ class GalleryAdapter(var imageUrl: List<String>, private val listener: OnItemCli
     override fun onBindViewHolder(holder: GalleryViewHolder, position: Int) {
 
         if (imageUrl.size > position) {
+
             val curImage = imageUrl[position]
             holder.itemView.gallery_image.setBitmapViaUrl(curImage)
             holder.crossButton.setOnClickListener(object : RemoveButtonListener() {

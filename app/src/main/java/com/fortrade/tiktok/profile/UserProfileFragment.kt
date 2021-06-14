@@ -123,7 +123,7 @@ class UserProfileFragment : Fragment() {
 
 
     private fun setupViewPager(viewpager: ViewPager) {
-        var adapter = ViewPagerAdapter((activity as AppCompatActivity).supportFragmentManager)
+        val adapter = ViewPagerAdapter((activity as AppCompatActivity).supportFragmentManager)
 
         // LoginFragment is the name of Fragment and the Login
         // is a title of tab

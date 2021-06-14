@@ -28,17 +28,10 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import java.util.*
 
-
-/*
-
- */
-
 class UpdateProfileFragment : Fragment() {
     companion object {
         private const val TAG = "MainActivity"
     }
-
-
 
     lateinit var BirthDay: String
     var valid = true
@@ -297,12 +290,11 @@ class UpdateProfileFragment : Fragment() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 82 && resultCode == AppCompatActivity.RESULT_OK && data != null) {
             selectedProfileUri = data.data
-
             binding.profileImage.setImageURI(selectedProfileUri)
         }
     }
 
-    fun checkField(textField: EditText): Boolean {
+    private fun checkField(textField: EditText): Boolean {
         if (textField.text.toString().isEmpty()) {
             textField.error = "Error"
             textField.requestFocus()
