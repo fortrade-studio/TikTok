@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.Button
 import android.widget.Toast
+import androidx.core.content.contentValuesOf
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -40,6 +41,12 @@ class GalleryAdapter(
                 itemView.gallery_image.setOnClickListener {
                     listener.onItemClick(adapterPosition, 0)
                 }
+            }
+            else{
+                itemView.gallery_image.setOnClickListener {
+                    Toast.makeText(itemView.context, "image is present", Toast.LENGTH_SHORT).show()
+                }
+
             }
         }
 
