@@ -103,7 +103,7 @@ class HomeFragment : Fragment() ,SwipeRefreshLayout.OnRefreshListener{
         Upload = view.findViewById(R.id.Upload)
         viewPager2 = view.findViewById(R.id.viewPager)
 
-        videoAdapter = VideoAdapter(arrVideoModel, requireContext())
+        videoAdapter = VideoAdapter(arrVideoModel, requireContext(),requireView())
         viewPager2.adapter = videoAdapter
 
         videoAdapter.setLoadMoreAction {

@@ -10,9 +10,11 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat.startActivity
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.fortrade.tiktok.HomeFragmentDirections
 import com.fortrade.tiktok.R
 import com.fortrade.tiktok.diffUtils.VideosDiffUtils
 import com.fortrade.tiktok.room.Liked
@@ -29,7 +31,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.processNextEventInCurrentThread
 
 
-class VideoAdapter(arrVideo: ArrayList<VideoModel>, val context: Context) :
+class VideoAdapter(arrVideo: ArrayList<VideoModel>, val context: Context,val view:View) :
     RecyclerView.Adapter<VideoAdapter.VideoViewHolder>() {
 
     var arrVideoModel: ArrayList<VideoModel> = arrVideo
@@ -55,7 +57,7 @@ class VideoAdapter(arrVideo: ArrayList<VideoModel>, val context: Context) :
     }
 
     override fun onBindViewHolder(holder: VideoViewHolder, position: Int) {
-        holder.setVideoData(arrVideoModel[position], dao, context)
+        holder.setVideoData(arrVideoModel[position], dao, context,view)
         if (position + 1 == arrVideoModel.size) {
             // this is the last item
             loadMore?.invoke()
@@ -91,12 +93,17 @@ class VideoAdapter(arrVideo: ArrayList<VideoModel>, val context: Context) :
 
     class VideoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        fun setVideoData(videoModel: VideoModel, dao: VideoDao, context: Context) {
+        fun setVideoData(videoModel: VideoModel, dao: VideoDao, context: Context,view: View) {
 
             val ioScope = CoroutineScope(Dispatchers.IO)
 
             itemView.auditionContentView.setChildText(videoModel.likes)
             itemView.videoView.setVideoPath(videoModel.videoUrl)
+
+            itemView.profileBar.setOnClickListener {
+                val action = HomeFragmentDirections.actionHomeFragmentToUserProfileFragment(videoModel.uploaderKey)
+                Navigation.findNavController(view).navigate(action)
+            }
 
             itemView.shareButton.setOnClickListener {
                 val shareIntent = Intent(Intent.ACTION_SEND)
