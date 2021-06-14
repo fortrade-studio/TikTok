@@ -186,6 +186,7 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
             builder.dismiss()
             val builders = AlertDialog.Builder(context)
+            builders.setCancelable(false)
             val videoView: VideoView = VideoView(context)
             val videoUri = data?.data
 
@@ -207,6 +208,7 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         if (resultCode == Activity.RESULT_OK && requestCode == 8) {
             if (data?.data != null) {
                 val builders = AlertDialog.Builder(context)
+                builders.setCancelable(false)
                 val videoView: VideoView = VideoView(context)
                 var uri: Uri = data.data!!
                 videoView.setVideoURI(uri)
