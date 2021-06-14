@@ -5,10 +5,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.fortrade.tiktok.R
 import com.fortrade.tiktok.profile.Adapter.ClipsAdapter
 import com.fortrade.tiktok.profile.Adapter.GalleryAdapter
+import com.fortrade.tiktok.viewModel.ClipFragmentViewModel
+import com.fortrade.tiktok.viewModel.ClipFragmentViewModelFactory
 import kotlinx.android.synthetic.main.fragment_clips.*
 import kotlinx.android.synthetic.main.fragment_gallery.*
 import kotlinx.android.synthetic.main.fragment_gallery.recycler_view_item
@@ -16,22 +19,7 @@ import kotlinx.android.synthetic.main.fragment_gallery.recycler_view_item
 
 class ClipsFragment : Fragment() {
 
-    var thumbnails = mutableListOf(
-
-        R.drawable.white_person_icon,
-        R.drawable.pp,
-        R.drawable.pp,
-        R.drawable.ic_images,
-        R.drawable.ic_images,
-        R.drawable.ic_images,
-        R.drawable.pp,
-        R.drawable.pp
-
-    )
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
+    lateinit var clipFragmentViewModel: ClipFragmentViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,9 +32,16 @@ class ClipsFragment : Fragment() {
     override fun onViewCreated(itemView: View, savedInstanceState: Bundle?) {
         super.onViewCreated(itemView, savedInstanceState)
 
-        val adapter = ClipsAdapter(thumbnails)
+        clipFragmentViewModel = ViewModelProvider(this,ClipFragmentViewModelFactory(requireActivity(),requireView())).get(ClipFragmentViewModel::class.java)
+
+        val adapter = ClipsAdapter(ArrayList())
         recycler_view_clips.adapter = adapter
         recycler_view_clips.layoutManager = GridLayoutManager(activity,2)
+
+        clipFragmentViewModel.getVideos {
+            adapter.dispatchUpdates(it)
+        }
+
 
 
     }
