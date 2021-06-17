@@ -37,8 +37,14 @@ class GalleryFragmentViewModel(
                     val value = it.getValue(userMap::class.java) as userMap
                     val convertMapToUser = convertMapToUser(value)
 
-                    val hashMap = it.child("UserImages").value as HashMap<*, String>
-                    convertMapToUser.UserImages = hashMap.values.toList()
+
+                    try {
+                        val hashMap = it.child("UserImages").value as ArrayList<String>
+                        convertMapToUser.UserImages = hashMap
+                    }catch (e:ClassCastException){
+                        val hashMap = it.child("UserImages").value as HashMap<*,String>
+                        convertMapToUser.UserImages = hashMap.values.toList()
+                    }
 
                     try {
                         val reelsMap = it.child("userVideos").value as HashMap<*,String>

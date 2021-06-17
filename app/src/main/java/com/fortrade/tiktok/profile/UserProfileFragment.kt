@@ -1,13 +1,9 @@
 package com.fortrade.tiktok.profile
 
-import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -16,12 +12,8 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.viewpager.widget.ViewPager
-import com.bumptech.glide.Glide
 import com.fortrade.tiktok.R
-import com.fortrade.tiktok.authentication.AuthFragmentDirections
-import com.fortrade.tiktok.databinding.FragmentGalleryBinding
 import com.fortrade.tiktok.databinding.FragmentUserProfileBinding
-import com.fortrade.tiktok.profile.Adapter.GalleryAdapter
 import com.fortrade.tiktok.profile.Adapter.ViewPagerAdapter
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.auth.FirebaseAuth
@@ -30,9 +22,7 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_user_profile.*
 import kotlinx.android.synthetic.main.fragment_user_profile.view.*
-import java.io.IOException
-import java.net.HttpURLConnection
-import java.net.URL
+import java.lang.IllegalStateException
 
 
 class UserProfileFragment : Fragment() {
@@ -43,10 +33,14 @@ class UserProfileFragment : Fragment() {
     lateinit var insta: ImageView
     lateinit var fb: ImageView
     private lateinit var database: DatabaseReference
-    private val phoneNumber = FirebaseAuth.getInstance().currentUser?.phoneNumber
+    private val phoneNumber =
+        FirebaseAuth.getInstance().currentUser?.phoneNumber?.removePrefix("+91")
     lateinit var binding: FragmentUserProfileBinding
     private val args by navArgs<UserProfileFragmentArgs>()
     private val sharedViewModel: SharedViewModel by activityViewModels()
+
+
+    private lateinit var userProfileView: View
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,9 +51,9 @@ class UserProfileFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
-        val view = inflater.inflate(R.layout.fragment_user_profile, container, false)
+        userProfileView = inflater.inflate(R.layout.fragment_user_profile, container, false)
 
         sharedViewModel.savePhoneNumber(args.userNumber)
         database = FirebaseDatabase.getInstance().getReference("userProfileData")
@@ -72,10 +66,11 @@ class UserProfileFragment : Fragment() {
                 val profileImage = it.child("profileImageUrl").value
                 val realName = it.child("fullName").value
 
-                view.username_textview.text = username.toString()
-                view.bio_textview.text = bio.toString()
-                Picasso.with(activity).load(profileImage.toString()).into(view.user_photo)
-                view.full_name.text = realName.toString()
+                userProfileView.username_textview.text = username.toString()
+                userProfileView.bio_textview.text = bio.toString()
+                Picasso.with(activity).load(profileImage.toString())
+                    .into(userProfileView.user_photo)
+                userProfileView.full_name.text = realName.toString()
 
             } else {
 
@@ -86,14 +81,14 @@ class UserProfileFragment : Fragment() {
         }
 
 
-        tabLayout = view.findViewById(R.id.profile_tab_layout)
-        viewPager = view.findViewById(R.id.viewpager)
+        tabLayout = userProfileView.findViewById(R.id.profile_tab_layout)
+        viewPager = userProfileView.findViewById(R.id.viewpager)
         setupViewPager(viewPager)
 
         tabLayout.setupWithViewPager(viewPager)
         tabLayout.getTabAt(0)?.setIcon(R.drawable.ic_photos)
         tabLayout.getTabAt(1)?.setIcon(R.drawable.ic_videos)
-        return view
+        return userProfileView
     }
 
 
@@ -106,12 +101,12 @@ class UserProfileFragment : Fragment() {
         fb = view.findViewById(R.id.fb_logo)
 
 
-        if(args.userNumber == phoneNumber) {
+        if (args.userNumber == phoneNumber) {
             // if this is user profile tab then show edit button
             editProfile.setOnClickListener {
                 findNavController().navigate(R.id.action_userProfileFragment_to_updateProfileFragment)
             }
-        }else{
+        } else {
             // it is not user's tab
             editProfile.visibility = View.GONE
         }
@@ -128,8 +123,11 @@ class UserProfileFragment : Fragment() {
             findNavController().navigate(R.id.action_userProfileFragment_to_homeFragment)
         }
 
-        user_photo.setOnClickListener{
-            val action = UserProfileFragmentDirections.actionUserProfileFragmentToFullscreenImageFragment(args.userNumber)
+        user_photo.setOnClickListener {
+            val action =
+                UserProfileFragmentDirections.actionUserProfileFragmentToFullscreenImageFragment(
+                    args.userNumber
+                )
             findNavController().navigate(action)
         }
 
@@ -149,5 +147,19 @@ class UserProfileFragment : Fragment() {
         viewpager.setAdapter(adapter)
     }
 
+    override fun onResume() {
+        super.onResume()
 
+        try {
+
+            tabLayout = userProfileView.findViewById(R.id.profile_tab_layout)
+            viewPager = userProfileView.findViewById(R.id.viewpager)
+            setupViewPager(viewPager)
+
+            tabLayout.setupWithViewPager(viewPager)
+            tabLayout.getTabAt(0)?.setIcon(R.drawable.ic_photos)
+            tabLayout.getTabAt(1)?.setIcon(R.drawable.ic_videos)
+
+        }catch (e:IllegalStateException){ }
+    }
 }

@@ -164,7 +164,7 @@ class AuditionContentView @JvmOverloads constructor(
 
     }
 
-    fun like(resId:Int){
+    fun like(resId:Int,isLike:Boolean = false){
         val muteButton = children.elementAt(3)
         muteButton.setBackgroundResource(resId)
 
@@ -172,7 +172,12 @@ class AuditionContentView @JvmOverloads constructor(
             muteButton.visibility = View.VISIBLE
             muteButton.animate()
                 .alpha(0f)
-                .setDuration(800L)
+                .setDuration(
+                    if(!isLike)
+                        800L
+                    else
+                        1300L
+                )
                 .withEndAction {
                     muteButton.alpha = 1f
                     muteButton.visibility = View.GONE

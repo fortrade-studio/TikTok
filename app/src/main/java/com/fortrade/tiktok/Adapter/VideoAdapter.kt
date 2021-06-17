@@ -206,7 +206,7 @@ class VideoAdapter(arrVideo: ArrayList<VideoModel>, val context: Context,val vie
                 tapCounter = if (tapCounter >= 2) {
                     // then we run the user function
                     Log.i("VideoAdapter", "Double Tap: ")
-                    itemView.auditionContentView.like(R.drawable.ic_heart_gill)
+                    itemView.auditionContentView.like(R.drawable.ic_heart_gill,true)
                     itemView.auditionContentView.state = 0
                     itemView.likeButton.callOnClick()
                     itemView.auditionContentView.state=1
@@ -240,6 +240,9 @@ class VideoAdapter(arrVideo: ArrayList<VideoModel>, val context: Context,val vie
                     Log.i("VideoAdapter", "setVideoData: downnn")
                     ++tapCounter;
                     waitHandler()
+                }
+                if(event?.action == MotionEvent.ACTION_MOVE){
+                    postDelayed.removeCallbacks(function)
                 }
                 return@setOnTouchListener true
             }
