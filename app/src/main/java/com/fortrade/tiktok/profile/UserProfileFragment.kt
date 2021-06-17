@@ -43,6 +43,7 @@ class UserProfileFragment : Fragment() {
     lateinit var insta: ImageView
     lateinit var fb: ImageView
     private lateinit var database: DatabaseReference
+    private val phoneNumber = FirebaseAuth.getInstance().currentUser?.phoneNumber
     lateinit var binding: FragmentUserProfileBinding
     private val args by navArgs<UserProfileFragmentArgs>()
     private val sharedViewModel: SharedViewModel by activityViewModels()
@@ -105,8 +106,14 @@ class UserProfileFragment : Fragment() {
         fb = view.findViewById(R.id.fb_logo)
 
 
-        editProfile.setOnClickListener {
-            findNavController().navigate(R.id.action_userProfileFragment_to_updateProfileFragment)
+        if(args.userNumber == phoneNumber) {
+            // if this is user profile tab then show edit button
+            editProfile.setOnClickListener {
+                findNavController().navigate(R.id.action_userProfileFragment_to_updateProfileFragment)
+            }
+        }else{
+            // it is not user's tab
+            editProfile.visibility = View.GONE
         }
 
         insta.setOnClickListener {
