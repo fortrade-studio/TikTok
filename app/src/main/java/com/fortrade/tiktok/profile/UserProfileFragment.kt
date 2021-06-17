@@ -18,6 +18,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.viewpager.widget.ViewPager
 import com.bumptech.glide.Glide
 import com.fortrade.tiktok.R
+import com.fortrade.tiktok.authentication.AuthFragmentDirections
 import com.fortrade.tiktok.databinding.FragmentGalleryBinding
 import com.fortrade.tiktok.databinding.FragmentUserProfileBinding
 import com.fortrade.tiktok.profile.Adapter.GalleryAdapter
@@ -84,23 +85,25 @@ class UserProfileFragment : Fragment() {
         }
 
 
+        tabLayout = view.findViewById(R.id.profile_tab_layout)
+        viewPager = view.findViewById(R.id.viewpager)
+        setupViewPager(viewPager)
 
+        tabLayout.setupWithViewPager(viewPager)
+        tabLayout.getTabAt(0)?.setIcon(R.drawable.ic_photos)
+        tabLayout.getTabAt(1)?.setIcon(R.drawable.ic_videos)
         return view
     }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        tabLayout = view.findViewById(R.id.profile_tab_layout)
-        viewPager = view.findViewById(R.id.viewpager)
+
+
         editProfile = view.findViewById(R.id.edit_profile)
         insta = view.findViewById(R.id.insta_logo)
         fb = view.findViewById(R.id.fb_logo)
-        setupViewPager(viewPager)
 
-        tabLayout.setupWithViewPager(viewPager)
-        tabLayout.getTabAt(0)?.setIcon(R.drawable.ic_photos)
-        tabLayout.getTabAt(1)?.setIcon(R.drawable.ic_videos)
 
         editProfile.setOnClickListener {
             findNavController().navigate(R.id.action_userProfileFragment_to_updateProfileFragment)
@@ -115,7 +118,12 @@ class UserProfileFragment : Fragment() {
         }
 
         profile_back_button.setOnClickListener {
-            Toast.makeText(context, "Back button pressed!", Toast.LENGTH_SHORT).show()
+            findNavController().navigate(R.id.action_userProfileFragment_to_homeFragment)
+        }
+
+        user_photo.setOnClickListener{
+            val action = UserProfileFragmentDirections.actionUserProfileFragmentToFullscreenImageFragment(args.userNumber)
+            findNavController().navigate(action)
         }
 
 

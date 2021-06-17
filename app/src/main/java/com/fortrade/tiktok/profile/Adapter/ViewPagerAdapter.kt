@@ -3,9 +3,10 @@ package com.fortrade.tiktok.profile.Adapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
+import androidx.fragment.app.FragmentStatePagerAdapter
 
 
-class ViewPagerAdapter : FragmentPagerAdapter {
+class ViewPagerAdapter : FragmentStatePagerAdapter {
 
     // objects of arraylist. One is of Fragment type and
     // another one is of String type.*/

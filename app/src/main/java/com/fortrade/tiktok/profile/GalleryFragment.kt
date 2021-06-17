@@ -65,6 +65,8 @@ class GalleryFragment(
         savedInstanceState: Bundle?
     ): View? {
         val view: View = inflater.inflate(R.layout.fragment_gallery, container, false)
+        galleryAdapter=GalleryAdapter(images, this,true)
+        galleryAdapter.notifyDataSetChanged()
         return view
     }
 
