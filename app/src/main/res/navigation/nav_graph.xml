@@ -76,6 +76,9 @@
         <action
             android:id="@+id/action_userProfileFragment_to_fullscreenImageFragment"
             app:destination="@id/fullscreenImageFragment" />
+        <action
+            android:id="@+id/action_userProfileFragment_to_clipsFullscreenFragment2"
+            app:destination="@id/clipsFullscreenFragment2" />
     </fragment>
     <fragment
         android:id="@+id/fullscreenImageFragment"
@@ -85,5 +88,9 @@
             android:name="userNumber"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/clipsFullscreenFragment2"
+        android:name="com.fortrade.tiktok.profile.ClipsFullscreenFragment"
+        android:label="ClipsFullscreenFragment" />
 
 </navigation>
