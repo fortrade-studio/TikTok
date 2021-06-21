@@ -55,20 +55,20 @@ class ClipsAdapter(
             itemView.videoView.setOnClickListener {
 
 
-                listener.onItemClick(adapterPosition,videoList[position].videoUrl)
+                listener.onItemClick(adapterPosition,videoList[position].videoUrl, videoList[position].likes, videoList[position].uniqueVideoId)
             }
         }
 
         override fun onClick(v: View?) {
             val position = adapterPosition
-            listener.onItemClick(position,videoList[position].videoUrl)
+            listener.onItemClick(position,videoList[position].videoUrl, videoList[position].likes, videoList[position].uniqueVideoId)
         }
 
 
     }
 
     interface OnItemClickListener {
-        fun onItemClick(position: Int, vidURL: String)
+        fun onItemClick(position: Int, vidURL: String, likes: String, uniqueVideoId: String)
     }
 
 }

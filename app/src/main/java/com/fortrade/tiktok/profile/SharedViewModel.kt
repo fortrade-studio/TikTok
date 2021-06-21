@@ -11,15 +11,19 @@ class SharedViewModel : ViewModel() {
     private var vidURL = MutableLiveData("")
     val _vidURL: LiveData<String> = vidURL
 
-    private var _phoneNumberClipsFragment = MutableLiveData("")
-    val phoneNumberClipsFragment: LiveData<String> = _phoneNumberClipsFragment
+    private var like = MutableLiveData("")
+    val _like: LiveData<String> = like
+
+    private var uniqueVidID = MutableLiveData("")
+    val _uniqueVidID: LiveData<String> = uniqueVidID
 
     fun savePhoneNumber(newPhoneNumber: String) {
         phoneNumber.value = newPhoneNumber
     }
 
-    fun saveVidURL(newVidURL: String, newPhoneNumberClipsFragment: String) {
+    fun saveVidInfo(newVidURL: String, likes: String, uniqueVideoId: String) {
         vidURL.value = newVidURL
-        _phoneNumberClipsFragment.value = newPhoneNumberClipsFragment
+        like.value = likes
+        uniqueVidID.value = uniqueVideoId
     }
 }

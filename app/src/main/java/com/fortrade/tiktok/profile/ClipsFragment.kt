@@ -76,9 +76,9 @@ class ClipsFragment(
 
     }
 
-    override fun onItemClick(position: Int, vidURL: String) {
+    override fun onItemClick(position: Int, vidURL: String,  likes: String, uniqueVideoId: String) {
         model = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
-        model.saveVidURL(vidURL,number)
+        model.saveVidInfo(vidURL,likes,uniqueVideoId);
         findNavController().navigate(R.id.action_userProfileFragment_to_clipsFullscreenFragment2)
     }
 
