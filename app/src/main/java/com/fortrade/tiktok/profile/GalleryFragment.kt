@@ -144,7 +144,7 @@ class GalleryFragment(
         progressDialog.setCanceledOnTouchOutside(false)
         progressDialog.show()
 
-        Toast.makeText(context, "cool", Toast.LENGTH_SHORT).show()
+//        Toast.makeText(context, "cool", Toast.LENGTH_SHORT).show()
         progressDialog.dismiss()
     }
 
