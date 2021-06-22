@@ -19,6 +19,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.graphics.scale
 import androidx.core.view.children
+import androidx.lifecycle.MutableLiveData
 import org.w3c.dom.Attr
 import java.lang.Exception
 import java.net.URL
@@ -40,7 +41,6 @@ class ProfileImagesViewGroup @JvmOverloads constructor(
 
 
     private var isInit = false
-
 
 
     override fun onFinishInflate() {
@@ -67,9 +67,9 @@ class ProfileImagesViewGroup @JvmOverloads constructor(
 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
         val first = this.children.first()
-        if(first is AppCompatButton){
-            first.layout(width-width/3, 0, width-width/5, 70)
-        }else{
+        if (first is AppCompatButton) {
+            first.layout(width - width / 3, 0, width - width / 5, 70)
+        } else {
             throw Exception("Button Type For ProfileImagesViewGroup must be AppCompatButton located at index 0 of child tree")
         }
 
@@ -118,12 +118,12 @@ class ProfileImagesViewGroup @JvmOverloads constructor(
     override fun onDraw(c: Canvas?) {
         if (bit != null) {
             c?.drawColor(Color.WHITE)
-            val scalex= width/(bit.width.toFloat()+bit.width.toFloat()/4)
-            val scaley = height/bit.height.toFloat()
-            m.setScale(scalex,scaley,0f,0f)
+            val scalex = width / (bit.width.toFloat() + bit.width.toFloat() / 4)
+            val scaley = height / bit.height.toFloat()
+            m.setScale(scalex, scaley, 0f, 0f)
             canvas.drawRoundRect(0f, 0f, width.toFloat(), height.toFloat(), 15f, 15f, paint)
             canvas.setMatrix(m)
-            canvas.drawBitmap(bit, 0f,0f, paint)
+            canvas.drawBitmap(bit, 0f, 0f, paint)
             roundedPath.addRoundRect(
                 0f,
                 0f,
@@ -135,8 +135,8 @@ class ProfileImagesViewGroup @JvmOverloads constructor(
             )
             c?.clipPath(roundedPath)
             c?.drawBitmap(bitmap, rect, rectF, paint)
-            if(isDelete){
-                c?.drawLine(0f,0f,width.toFloat(),height.toFloat(),arc)
+            if (isDelete) {
+                c?.drawLine(0f, 0f, width.toFloat(), height.toFloat(), arc)
             }
         }
     }
@@ -145,6 +145,9 @@ class ProfileImagesViewGroup @JvmOverloads constructor(
 
     private var isDelete = false
 
+    var bitmapImage: MutableLiveData<Bitmap> = MutableLiveData(this.bit)
+
+
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     fun setBitmap(bitmap: Bitmap) {
         this.bit = bitmap.copy(Bitmap.Config.ARGB_8888, true)
@@ -152,22 +155,28 @@ class ProfileImagesViewGroup @JvmOverloads constructor(
         invalidate()
     }
 
-    fun deleteEffect(){
+    fun deleteEffect() {
         isDelete = true
         invalidate()
     }
 
-    fun setBitmapViaUrl(url:String){
+    fun setBitmapViaUrl(url: String) {
         AsyncTask.execute {
-            val URL = URL(url)
-            val decodeStream = BitmapFactory.decodeStream(URL.openConnection().getInputStream())
-            this.bit = decodeStream.copy(Bitmap.Config.ARGB_8888,true)
-            isInit = true
-            invalidate()
+            try {
+                val URL = URL(url)
+                val decodeStream = BitmapFactory.decodeStream(URL.openConnection().getInputStream())
+                this.bit = decodeStream.copy(Bitmap.Config.ARGB_8888, true)
+                bitmapImage.postValue(this.bit)
+                isInit = true
+                invalidate()
+
+            } catch (e: Exception) {
+            }
         }
     }
 
     private val longPressRunnable = Runnable {
+        handler.removeCallbacks(clickRunnable)
         val first = this@ProfileImagesViewGroup.children.first()
         if (first is Button) {
             // we can show or hide it accordingly
@@ -184,19 +193,35 @@ class ProfileImagesViewGroup @JvmOverloads constructor(
         }
     }
 
+    private val clickRunnable = Runnable{
+        listener?.invoke()
+    }
+
+
+
 
     override fun performClick(): Boolean {
         super.performClick()
         return true;
     }
 
+    var listener: (() -> Unit)? = null
+    fun setOnOpenImageClick(l: () -> Unit) {
+        listener = l;
+    }
+
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         if (event?.action == MotionEvent.ACTION_DOWN) {
-            if(!isInit){
+            if (!isInit) {
                 performClick()
                 return true
-            }
+            } else {
             handler.postDelayed(longPressRunnable, ViewConfiguration.getLongPressTimeout().toLong())
+                handler.postDelayed(clickRunnable,
+                    ViewConfiguration.getLongPressTimeout().toLong().plus(50)
+                )
+
+            }
         }
         if (event?.action == MotionEvent.ACTION_MOVE || event?.action == MotionEvent.ACTION_UP) {
             // user releases
@@ -225,12 +250,12 @@ class ProfileImagesViewGroup @JvmOverloads constructor(
     }
 
     override fun onWindowFocusChanged(hasWindowFocus: Boolean) {
-        if(!hasWindowFocus){
+        if (!hasWindowFocus) {
             removeCross()
         }
     }
 
-    private fun removeCross(){
+    private fun removeCross() {
         val first = this@ProfileImagesViewGroup.children.first()
         if (first is Button) {
             // we can show or hide it accordingly

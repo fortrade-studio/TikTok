@@ -65,7 +65,7 @@ class GalleryFragment(
         savedInstanceState: Bundle?
     ): View? {
         val view: View = inflater.inflate(R.layout.fragment_gallery, container, false)
-        galleryAdapter=GalleryAdapter(images, this,true)
+        galleryAdapter=GalleryAdapter(images, this,true,requireContext(),this)
         galleryAdapter.notifyDataSetChanged()
         return view
     }
@@ -77,7 +77,7 @@ class GalleryFragment(
         galleryViewModel = ViewModelProvider(this,GalleryFragmentViewModelFactory(requireActivity(),requireView())).get(GalleryFragmentViewModel::class.java)
 
         if(number==phone){
-            galleryAdapter=GalleryAdapter(images, this,true)
+            galleryAdapter=GalleryAdapter(images, this,true,requireContext(),this)
             // user profile
             recycler_view_item.adapter = galleryAdapter
             recycler_view_item.layoutManager = GridLayoutManager(activity, 3)
@@ -94,7 +94,7 @@ class GalleryFragment(
         }
         else{
 
-            galleryAdapter=GalleryAdapter(images, this,false)
+            galleryAdapter=GalleryAdapter(images, this,false,requireContext(),this)
             // user profile
             recycler_view_item.adapter = galleryAdapter
             recycler_view_item.layoutManager = GridLayoutManager(activity, 3)
@@ -146,6 +146,49 @@ class GalleryFragment(
 
 //        Toast.makeText(context, "cool", Toast.LENGTH_SHORT).show()
         progressDialog.dismiss()
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        try {
+
+            if (number == phone) {
+                galleryAdapter = GalleryAdapter(images, this, true, requireContext(), this)
+                // user profile
+                recycler_view_item.adapter = galleryAdapter
+                recycler_view_item.layoutManager = GridLayoutManager(activity, 3)
+                fetchDataFromFirebase()
+                progressDialog = ProgressDialog(context)
+                progressDialog.setMessage("Please Wait")
+                progressDialog.setCanceledOnTouchOutside(false)
+
+                galleryViewModel.getImages({
+                    galleryAdapter.imageUrl = ArrayList(it)
+                    galleryAdapter.notifyDataSetChanged()
+                }, number)
+
+            } else {
+
+                galleryAdapter = GalleryAdapter(images, this, false, requireContext(), this)
+                // user profile
+                recycler_view_item.adapter = galleryAdapter
+                recycler_view_item.layoutManager = GridLayoutManager(activity, 3)
+                fetchDataFromFirebase()
+                progressDialog = ProgressDialog(context)
+                progressDialog.setMessage("Please Wait")
+                progressDialog.setCanceledOnTouchOutside(false)
+
+                galleryViewModel.getImages({
+                    galleryAdapter.imageUrl = ArrayList(it).filter {
+                        it != null
+                    } as ArrayList<String>
+                    galleryAdapter.notifyDataSetChanged()
+                }, number)
+
+            }
+
+        }catch (e:Exception){}
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
