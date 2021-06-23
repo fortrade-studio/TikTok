@@ -1,4 +1,5 @@
 package com.leeladher.video
+
 import android.media.MediaPlayer
 import android.view.LayoutInflater
 import android.view.View
@@ -11,12 +12,15 @@ import com.fortrade.tiktok.R
 import com.fortrade.tiktok.diffUtils.VideosDiffUtils
 import kotlinx.android.synthetic.main.item_video.view.*
 
-class VideoAdapter(arrVideo:ArrayList<VideoModel>) : RecyclerView.Adapter<VideoAdapter.VideoViewHolder>() {
+class VideoAdapter(arrVideo: ArrayList<VideoModel>) :
+    RecyclerView.Adapter<VideoAdapter.VideoViewHolder>() {
 
-    var arrVideoModel:ArrayList<VideoModel> = arrVideo
+    var arrVideoModel: ArrayList<VideoModel> = arrVideo
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VideoViewHolder {
-        return VideoViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_video,parent,false))
+        return VideoViewHolder(
+            LayoutInflater.from(parent.context).inflate(R.layout.item_video, parent, false)
+        )
     }
 
     override fun getItemCount(): Int {
@@ -27,22 +31,22 @@ class VideoAdapter(arrVideo:ArrayList<VideoModel>) : RecyclerView.Adapter<VideoA
         holder.setVideoData(arrVideoModel[position])
     }
 
-    fun updateVideoList(newList:List<VideoModel>){
-        val videoUtilsCallback = VideosDiffUtils(newList,arrVideoModel)
+    fun updateVideoList(newList: List<VideoModel>) {
+        val videoUtilsCallback = VideosDiffUtils(newList, arrVideoModel)
         val diff = DiffUtil.calculateDiff(videoUtilsCallback)
         arrVideoModel.clear()
         arrVideoModel.addAll(newList)
         diff.dispatchUpdatesTo(this)
     }
 
-    class VideoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+    class VideoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        fun setVideoData(videoModel: VideoModel){
+        fun setVideoData(videoModel: VideoModel) {
 
             itemView.tvTitle.text = videoModel.videoTitle
             itemView.tvDesc.text = videoModel.videoDesc
             itemView.videoView.setVideoPath(videoModel.videoUrl)
-            itemView.videoView.setOnPreparedListener(object :MediaPlayer.OnPreparedListener{
+            itemView.videoView.setOnPreparedListener(object : MediaPlayer.OnPreparedListener {
                 override fun onPrepared(mp: MediaPlayer) {
                     itemView.progressBar.visibility = View.GONE
                     mp.start()
@@ -51,14 +55,13 @@ class VideoAdapter(arrVideo:ArrayList<VideoModel>) : RecyclerView.Adapter<VideoA
 
             })
 
-            itemView.videoView.setOnCompletionListener { object : MediaPlayer.OnCompletionListener{
-                override fun onCompletion(mp: MediaPlayer) {
-                    mp.start()
+            itemView.videoView.setOnCompletionListener {
+                object : MediaPlayer.OnCompletionListener {
+                    override fun onCompletion(mp: MediaPlayer) {
+                        mp.start()
+                    }
                 }
-            } }
-
+            }
         }
-
     }
-
 }
