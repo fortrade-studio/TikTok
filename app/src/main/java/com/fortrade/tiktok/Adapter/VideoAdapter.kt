@@ -1,4 +1,4 @@
-package com.leeladher.video
+package com.fortrade.tiktok.Adapter
 
 import android.content.Context
 import android.content.Intent
@@ -72,6 +72,14 @@ class VideoAdapter(arrVideo: ArrayList<VideoModel>, val context: Context,val vie
         diff.dispatchUpdatesTo(this)
     }
 
+    fun updateVideoList(newList: List<VideoModel>) {
+        val videoUtilsCallback = VideosDiffUtils(newList, arrVideoModel)
+        val diff = DiffUtil.calculateDiff(videoUtilsCallback)
+        arrVideoModel.clear()
+        arrVideoModel.addAll(newList)
+        diff.dispatchUpdatesTo(this)
+    }
+  
     fun refresh(newList: List<VideoModel>) {
         val videoUtilsCallback = VideosDiffUtils(newList, arrVideoModel)
         val diff = DiffUtil.calculateDiff(videoUtilsCallback)
@@ -247,7 +255,7 @@ class VideoAdapter(arrVideo: ArrayList<VideoModel>, val context: Context,val vie
                 return@setOnTouchListener true
             }
 
-            itemView.videoView.setOnPreparedListener(object : MediaPlayer.OnPreparedListener {
+           itemView.videoView.setOnPreparedListener(object : MediaPlayer.OnPreparedListener {
                 override fun onPrepared(mp: MediaPlayer) {
                     mediaPlayer = mp
                     itemView.progressBar.visibility = View.GONE
@@ -265,7 +273,5 @@ class VideoAdapter(arrVideo: ArrayList<VideoModel>, val context: Context,val vie
 //                }
             }
         }
-
     }
-
 }
