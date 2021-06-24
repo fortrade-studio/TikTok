@@ -59,7 +59,7 @@ class GalleryFragmentViewModel(
 
                 Log.i(TAG, "getImages: $value")
                 if (value != null) {
-                    onImagesFetched(value.UserImages)
+                    onImagesFetched(value.UserImages.filter { it!=null && it.trim()!="null" && it.isNotEmpty() })
                 }
             }
     }

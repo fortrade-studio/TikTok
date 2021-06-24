@@ -1,6 +1,7 @@
 package com.fortrade.tiktok.utils
 
 object Constants {
+    const val userVideos: String = "userVideos"
     const val content:String = "Content"
     const val general : String = "general"
     const val videoTitle:String = "videoTitle"

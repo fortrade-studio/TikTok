@@ -44,6 +44,7 @@ import kotlinx.android.synthetic.main.fragment_update_profile.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.lang.ClassCastException
 
 class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
@@ -313,22 +314,54 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                     var number: String =
                         FirebaseAuth.getInstance().currentUser.phoneNumber.removePrefix("+91")
 
-                    val videoData = VideoModel("$downloadUri", "", number)
+                    val videoData = VideoModel("$downloadUri", "0", number)
 
+                    val instance = FirebaseDatabase.getInstance()
+                    val profileReference = instance.getReference(Constants.userProfileData).child(number).child(Constants.userVideos)
 
                     val dbReference =
-                        FirebaseDatabase.getInstance().getReference("Content").child("general")
+                        instance.getReference("Content").child("general")
                     dbReference.child(timestamp)
                         .setValue(videoData)
                         .addOnSuccessListener { taskSnapshot ->
-                            progressDialog.dismiss()
 
-                            Toast.makeText(
-                                getActivity(),
-                                "Upload",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            // this is where user finally upload the video we need to link the video to user's
+                            // profile page also
 
+                            profileReference.get().addOnSuccessListener {
+                                try {
+                                    val list = it.value as ArrayList<String>
+                                    list.add(timestamp)
+
+                                    profileReference.setValue(list).addOnSuccessListener {
+                                        progressDialog.dismiss()
+
+                                        Toast.makeText(
+                                            getActivity(),
+                                            "Upload",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+
+                                    }
+
+                                }catch (e:ClassCastException){
+
+                                    val list = it.value as MutableMap<Int,String>
+                                    list[list.size] = timestamp
+
+                                    profileReference.setValue(list).addOnSuccessListener {
+                                        progressDialog.dismiss()
+
+                                        Toast.makeText(
+                                            getActivity(),
+                                            "Upload",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+
+                                    }
+                                }
+
+                            }
                         }
                         .addOnFailureListener { e ->
                             Toast.makeText(
@@ -373,20 +406,51 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
                     val number =
                         FirebaseAuth.getInstance().currentUser.phoneNumber.removePrefix("+91")
-                    val videoData = VideoModel("$downloadUri", "", number)
+                    val videoData = VideoModel("$downloadUri", "0", number)
+
+                    val instance = FirebaseDatabase.getInstance()
+                    val profileReference = instance.getReference(Constants.userProfileData).child(number).child(Constants.userVideos)
 
                     val dbReference =
                         FirebaseDatabase.getInstance().getReference("Content").child("general")
                     dbReference.child(timestamp)
                         .setValue(videoData)
                         .addOnSuccessListener { taskSnapshot ->
-                            progressDialog.dismiss()
 
-                            Toast.makeText(
-                                getActivity(),
-                                "Upload",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            profileReference.get().addOnSuccessListener {
+                                try {
+                                    val list = it.value as ArrayList<String>
+                                    list.add(timestamp)
+
+                                    profileReference.setValue(list).addOnSuccessListener {
+                                        progressDialog.dismiss()
+
+                                        Toast.makeText(
+                                            getActivity(),
+                                            "Upload",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+
+                                    }
+
+                                }catch (e:ClassCastException){
+
+                                    val list = it.value as MutableMap<Int,String>
+                                    list[list.size] = timestamp
+
+                                    profileReference.setValue(list).addOnSuccessListener {
+                                        progressDialog.dismiss()
+
+                                        Toast.makeText(
+                                            getActivity(),
+                                            "Upload",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+
+                                    }
+                                }
+
+                            }
 
                         }
                         .addOnFailureListener { e ->

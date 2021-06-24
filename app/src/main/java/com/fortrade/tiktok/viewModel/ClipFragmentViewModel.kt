@@ -35,9 +35,6 @@ class ClipFragmentViewModel(
             .get()
             .addOnSuccessListener {
                 val value = try {
-                    it.getValue(user::class.java)
-
-                }catch (e: DatabaseException){
                     val value = it.getValue(userMap::class.java) as userMap
                     val convertMapToUser = convertMapToUser(value)
 
@@ -50,15 +47,18 @@ class ClipFragmentViewModel(
                     }
                     try {
                         val reelsMap = it.child("userVideos").value as HashMap<*,String>
+                        Log.i(TAG, "getVideos: ${reelsMap.values.toList()}")
                         convertMapToUser.userVideos = reelsMap.values.toList()
                     }catch (e:ClassCastException){
                         val reelsMap = it.child("userVideos").value as ArrayList<String>
                         convertMapToUser.userVideos = reelsMap
                     }
                     convertMapToUser
+                }catch (e:Exception) {
+                    null
                 }
                 if (value != null) {
-                    getVideoByUniqueId(onFetched, value.userVideos, phoneNumber)
+                    getVideoByUniqueId(onFetched, value.userVideos.filter { it!=null && it.trim() !="null" &&it.isNotEmpty() }, phoneNumber)
                 }
             }
     }
