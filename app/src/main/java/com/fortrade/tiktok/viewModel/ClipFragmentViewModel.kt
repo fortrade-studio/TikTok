@@ -80,6 +80,7 @@ class ClipFragmentViewModel(
                     .addOnSuccessListener {
 
                         val value = it.getValue(VideoModel::class.java)
+                        value?.uniqueVideoId = it.key.toString()
                         Log.i(TAG, "getVideoByUniqueId: $value")
                         if (value != null) {
                             videos.add(value)

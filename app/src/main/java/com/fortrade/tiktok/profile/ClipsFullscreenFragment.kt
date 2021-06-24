@@ -76,15 +76,13 @@ class ClipsFullscreenFragment : Fragment() {
         model._vidURL.observe(viewLifecycleOwner, Observer {
             videoUrl = it
 
-
-
             fullVideoView.setVideoPath(videoUrl)
             shareButton.setOnClickListener {
                 val shareIntent = Intent(Intent.ACTION_SEND)
                 shareIntent.type = "text/plain"
                 shareIntent.putExtra(
                     Intent.EXTRA_TEXT,
-                    Constants.linkPrefix.plus(videoUrl)
+                    Constants.linkPrefix.plus(videoID)
                 )
                 context?.startActivity(Intent.createChooser(shareIntent, "Share using"))
             }

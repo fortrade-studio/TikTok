@@ -43,6 +43,7 @@ import kotlinx.android.synthetic.main.fragment_camera.*
 import kotlinx.android.synthetic.main.fragment_update_profile.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import java.lang.ClassCastException
 
@@ -100,41 +101,50 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         ).get(HomeFragmentViewModel::class.java)
 
 
+        var videoShareTask: Job? = null
+
         if (data != null) {
             // user navigate through dynamic link
-            val videoId = getVideoId(data.toString())
-            FirebaseDatabase.getInstance()
-                .getReference(Constants.content)
-                .child(Constants.general)
-                .child(videoId)
-                .get().addOnSuccessListener {
-                    val value = it.getValue(VideoModel::class.java)
-                    value?.let { it1 -> arrVideoModel.add(it1) }
-                }
-            Toast.makeText(requireContext(), videoId, Toast.LENGTH_SHORT).show()
+            videoShareTask = CoroutineScope(Dispatchers.IO).launch {
+                val videoId = getVideoId(data.toString())
+                FirebaseDatabase.getInstance()
+                    .getReference(Constants.content)
+                    .child(Constants.general)
+                    .child(videoId)
+                    .get().addOnSuccessListener {
+                        val value = it.getValue(VideoModel::class.java)
+                        value?.let { it1 -> arrVideoModel.add(0, it1) }
+                    }
+            }
+            videoShareTask.start()
         }
 
 
         Upload = view.findViewById(R.id.Upload)
         viewPager2 = view.findViewById(R.id.viewPager)
 
-        videoAdapter = VideoAdapter(arrVideoModel, requireContext(), requireView())
-        viewPager2.adapter = videoAdapter
+        val uiSetterFunction =  {
+            videoAdapter = VideoAdapter(arrVideoModel, requireContext(), requireView())
+            viewPager2.adapter = videoAdapter
+            videoAdapter.setLoadMoreAction {
+                homeFragmentViewModel.inflateSegment {
+                    mainScope.launch {
+                        videoAdapter.updateVideoList(it)
+                    }
+                }
+            }
 
-        videoAdapter.setLoadMoreAction {
-            homeFragmentViewModel.inflateSegment {
+            homeFragmentViewModel.getVideos({
                 mainScope.launch {
                     videoAdapter.updateVideoList(it)
                 }
-            }
+            })
         }
 
-        homeFragmentViewModel.getVideos({
-            mainScope.launch {
-                videoAdapter.updateVideoList(it)
-            }
-        })
-
+        if (videoShareTask == null) uiSetterFunction()
+        else {
+            videoShareTask.invokeOnCompletion { uiSetterFunction() }
+        }
 
         val navigate = view.findViewById<Button>(R.id.navigate)
         navigate.setOnClickListener {
@@ -317,7 +327,9 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                     val videoData = VideoModel("$downloadUri", "0", number)
 
                     val instance = FirebaseDatabase.getInstance()
-                    val profileReference = instance.getReference(Constants.userProfileData).child(number).child(Constants.userVideos)
+                    val profileReference =
+                        instance.getReference(Constants.userProfileData).child(number)
+                            .child(Constants.userVideos)
 
                     val dbReference =
                         instance.getReference("Content").child("general")
@@ -344,9 +356,9 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
                                     }
 
-                                }catch (e:ClassCastException){
+                                } catch (e: ClassCastException) {
 
-                                    val list = it.value as MutableMap<Int,String>
+                                    val list = it.value as MutableMap<Int, String>
                                     list[list.size] = timestamp
 
                                     profileReference.setValue(list).addOnSuccessListener {
@@ -409,7 +421,9 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                     val videoData = VideoModel("$downloadUri", "0", number)
 
                     val instance = FirebaseDatabase.getInstance()
-                    val profileReference = instance.getReference(Constants.userProfileData).child(number).child(Constants.userVideos)
+                    val profileReference =
+                        instance.getReference(Constants.userProfileData).child(number)
+                            .child(Constants.userVideos)
 
                     val dbReference =
                         FirebaseDatabase.getInstance().getReference("Content").child("general")
@@ -433,9 +447,9 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
                                     }
 
-                                }catch (e:ClassCastException){
+                                } catch (e: ClassCastException) {
 
-                                    val list = it.value as MutableMap<Int,String>
+                                    val list = it.value as MutableMap<Int, String>
                                     list[list.size] = timestamp
 
                                     profileReference.setValue(list).addOnSuccessListener {
@@ -479,6 +493,14 @@ class HomeFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
         swipeRefreshListener.isRefreshing = false
 
+    }
+
+    fun Job?.invokeOnCompletionOrIfNull(action: () -> Unit) {
+        if (this == null) {
+            action()
+        } else {
+            this.invokeOnCompletion { action() }
+        }
     }
 
 }
