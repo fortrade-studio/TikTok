@@ -9,7 +9,6 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat.startActivity
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -22,8 +21,8 @@ import com.fortrade.tiktok.room.VideoDao
 import com.fortrade.tiktok.room.VideoDatabase
 import com.fortrade.tiktok.room.VideoRepository
 import com.fortrade.tiktok.utils.Constants
-import com.fortradestudio.custom.AuditionContentView
 import com.google.firebase.database.FirebaseDatabase
+import com.leeladher.video.VideoModel
 import kotlinx.android.synthetic.main.item_video.view.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -31,7 +30,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.processNextEventInCurrentThread
 
 
-class VideoAdapter(arrVideo: ArrayList<VideoModel>, val context: Context,val view:View) :
+class VideoAdapter(arrVideo: ArrayList<VideoModel>, val context: Context, val view:View) :
     RecyclerView.Adapter<VideoAdapter.VideoViewHolder>() {
 
     var arrVideoModel: ArrayList<VideoModel> = arrVideo
@@ -72,14 +71,14 @@ class VideoAdapter(arrVideo: ArrayList<VideoModel>, val context: Context,val vie
         diff.dispatchUpdatesTo(this)
     }
 
-    fun updateVideoList(newList: List<VideoModel>) {
-        val videoUtilsCallback = VideosDiffUtils(newList, arrVideoModel)
-        val diff = DiffUtil.calculateDiff(videoUtilsCallback)
-        arrVideoModel.clear()
-        arrVideoModel.addAll(newList)
-        diff.dispatchUpdatesTo(this)
-    }
-  
+//    fun updateVideoList(newList: List<VideoModel>) {
+//        val videoUtilsCallback = VideosDiffUtils(newList, arrVideoModel)
+//        val diff = DiffUtil.calculateDiff(videoUtilsCallback)
+//        arrVideoModel.clear()
+//        arrVideoModel.addAll(newList)
+//        diff.dispatchUpdatesTo(this)
+//    }
+
     fun refresh(newList: List<VideoModel>) {
         val videoUtilsCallback = VideosDiffUtils(newList, arrVideoModel)
         val diff = DiffUtil.calculateDiff(videoUtilsCallback)
@@ -255,7 +254,7 @@ class VideoAdapter(arrVideo: ArrayList<VideoModel>, val context: Context,val vie
                 return@setOnTouchListener true
             }
 
-           itemView.videoView.setOnPreparedListener(object : MediaPlayer.OnPreparedListener {
+            itemView.videoView.setOnPreparedListener(object : MediaPlayer.OnPreparedListener {
                 override fun onPrepared(mp: MediaPlayer) {
                     mediaPlayer = mp
                     itemView.progressBar.visibility = View.GONE
