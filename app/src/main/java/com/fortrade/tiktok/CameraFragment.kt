@@ -15,6 +15,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.core.content.FileProvider
+import com.google.firebase.storage.FirebaseStorage
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionDeniedResponse
@@ -85,13 +86,13 @@ class CameraFragment : Fragment() {
 
         if (resultCode == Activity.RESULT_OK && requestCode == 8) {
             if (data?.data != null) {
-                var uri:Uri = data.data!!
+                val uri:Uri = data.data!!
                 videoRec.setVideoURI(uri)
-                var mediaController: MediaController = MediaController(context)
+                val mediaController: MediaController = MediaController(context)
                 val retriever = MediaMetadataRetriever()
                 retriever.setDataSource(context, Uri.parse(uri.toString()))
                 val time = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)
-                var timeInMillisec = time?.toLong();
+                val timeInMillisec = time?.toLong();
                 retriever.release()
                 if (timeInMillisec != null) {
                     if (timeInMillisec<=60000)
@@ -107,4 +108,5 @@ class CameraFragment : Fragment() {
             }
         }
     }
+
 }

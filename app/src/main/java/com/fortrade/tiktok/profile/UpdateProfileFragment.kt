@@ -28,11 +28,6 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import java.util.*
 
-
-/*
-
- */
-
 class UpdateProfileFragment : Fragment() {
     companion object {
         private const val TAG = "MainActivity"
@@ -98,7 +93,7 @@ class UpdateProfileFragment : Fragment() {
             if (selectedProfileUri != null) {
 
                 uploadImageToFirebaseStorage()
-            }else{
+            } else {
                 saveUserProfileData()
             }
         }
@@ -109,7 +104,6 @@ class UpdateProfileFragment : Fragment() {
         val radio: RadioButton? = view?.findViewById(binding.gender.checkedRadioButtonId)
         val fullName = binding.name.editableText.toString()
         val username = binding.userName.editableText.toString()
-        val phoneNumber = binding.phone.editableText.toString()
         val Bio = binding.bio.editableText.toString()
         val website = binding.website.editableText.toString()
         val gender = "${radio?.text}"
@@ -118,15 +112,15 @@ class UpdateProfileFragment : Fragment() {
         checkField(binding.bio)
 
 
-        if (TextUtils.isEmpty(phoneNumber)) {
-            progressDialog.dismiss()
-            binding.phone.error = "Enter Valid Number"
-            binding.phone.requestFocus()
-            return
-        }
         if (username.length < 4) {
             progressDialog.dismiss()
             binding.userName.error = "UserName should be at least 4 character"
+            binding.userName.requestFocus()
+            return
+        }
+        if(username.length > 32){
+            progressDialog.dismiss()
+            binding.userName.error = "UserName should be less than 32 character"
             binding.userName.requestFocus()
             return
         }
@@ -180,19 +174,18 @@ class UpdateProfileFragment : Fragment() {
 
         val fullName = binding.name.editableText.toString()
         val username = binding.userName.editableText.toString()
-        val phoneNumber = binding.phone.editableText.toString()
         val Bio = binding.bio.editableText.toString()
         val website = binding.website.editableText.toString()
         val gender = "${radio?.text}"
 
-        val users = FirebaseAuth.getInstance().currentUser
+        val users = FirebaseAuth.getInstance().currentUser as FirebaseUser
         val ref =
             FirebaseDatabase.getInstance().getReference("userProfileData")
 
         val user = UserProfileData(
             fullName,
             username,
-            phoneNumber,
+            users.phoneNumber!!,
             Bio,
             website,
             gender,
@@ -204,7 +197,10 @@ class UpdateProfileFragment : Fragment() {
             .addOnSuccessListener {
                 progressDialog.dismiss()
                 Toast.makeText(context, R.string.UploadData, Toast.LENGTH_LONG).show()
-                val action = UpdateProfileFragmentDirections.actionUpdateProfileFragmentToUserProfileFragment(user.PhoneNumber)
+                val action =
+                    UpdateProfileFragmentDirections.actionUpdateProfileFragmentToUserProfileFragment(
+                        user.PhoneNumber
+                    )
                 findNavController().navigate(action)
             }
 
@@ -216,17 +212,10 @@ class UpdateProfileFragment : Fragment() {
 
         val fullName = binding.name.editableText.toString()
         val username = binding.userName.editableText.toString()
-        val phoneNumber = binding.phone.editableText.toString()
         val Bio = binding.bio.editableText.toString()
         val website = binding.website.editableText.toString()
         val gender = "${radio?.text}"
 
-        if (TextUtils.isEmpty(phoneNumber)) {
-            progressDialog.dismiss()
-            binding.phone.error = "Enter Valid Number"
-            binding.phone.requestFocus()
-            return
-        }
         if (username.length < 4) {
             progressDialog.dismiss()
             binding.userName.error = "UserName should be at least 4 character"
@@ -253,16 +242,16 @@ class UpdateProfileFragment : Fragment() {
             ).show()
             return
         }
-        val users = FirebaseAuth.getInstance().currentUser
+        val users = FirebaseAuth.getInstance().currentUser as FirebaseUser
         val ref =
             FirebaseDatabase.getInstance().getReference("userProfileData")
 
         if (valid) {
-                progressDialog.show()
+            progressDialog.show()
             val user = UserProfileData(
                 fullName,
                 username,
-                phoneNumber,
+                users.phoneNumber!!,
                 Bio,
                 website,
                 gender,
@@ -274,10 +263,13 @@ class UpdateProfileFragment : Fragment() {
                 .addOnSuccessListener {
                     progressDialog.dismiss()
                     Toast.makeText(context, R.string.UploadData, Toast.LENGTH_LONG).show()
-                    val action = UpdateProfileFragmentDirections.actionUpdateProfileFragmentToUserProfileFragment(user.PhoneNumber)
+                    val action =
+                        UpdateProfileFragmentDirections.actionUpdateProfileFragmentToUserProfileFragment(
+                            user.PhoneNumber
+                        )
                     findNavController().navigate(action)
                 }
-        }else{
+        } else {
             progressDialog.dismiss()
             Toast.makeText(context, R.string.dataValid, Toast.LENGTH_LONG).show()
         }
@@ -289,12 +281,11 @@ class UpdateProfileFragment : Fragment() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 82 && resultCode == AppCompatActivity.RESULT_OK && data != null) {
             selectedProfileUri = data.data
-
             binding.profileImage.setImageURI(selectedProfileUri)
         }
     }
 
-    fun checkField(textField: EditText): Boolean {
+    private fun checkField(textField: EditText): Boolean {
         if (textField.text.toString().isEmpty()) {
             textField.error = "Error"
             textField.requestFocus()

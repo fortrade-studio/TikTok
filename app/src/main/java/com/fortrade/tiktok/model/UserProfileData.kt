@@ -13,5 +13,7 @@ data class UserProfileData(
     val Website: String,
     val gender: String,
     val birthOfDate: String,
-    val ProfileImageUrl: String? = null
+    val ProfileImageUrl: String? = null,
+    val UserImages:List<String> = emptyList(),
+    val userVideos:List<String> = emptyList()
 ):Parcelable

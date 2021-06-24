@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph.xml"
-    app:startDestination="@id/userProfileFragment">
+    app:startDestination="@id/authFragment">
 
     <fragment
         android:id="@+id/authFragment"
@@ -25,7 +25,7 @@
         <action
             android:id="@+id/action_authFragment_to_homeFragment"
             app:destination="@id/homeFragment"
-            app:popUpTo="@id/homeFragment"
+            app:popUpTo="@id/authFragment"
             app:popUpToInclusive="true" />
 
     </fragment>
@@ -33,23 +33,27 @@
         android:id="@+id/updateProfileFragment"
         android:name="com.fortrade.tiktok.profile.UpdateProfileFragment"
         android:label="fragment_update_profile"
-        tools:layout="@layout/fragment_update_profile" >
+        tools:layout="@layout/fragment_update_profile">
         <action
             android:id="@+id/action_updateProfileFragment_to_userProfileFragment"
             app:destination="@id/userProfileFragment" />
         <argument
-            android:name="userNumber"
-            app:argType="string" />
+            android:name="userNumber" />
     </fragment>
 
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.fortrade.tiktok.HomeFragment"
         android:label="fragment_show_video"
-        tools:layout="@layout/fragment_home" >
+        tools:layout="@layout/fragment_home">
+        <argument
+            android:name="userNumber" />
         <action
             android:id="@+id/action_homeFragment_to_cameraFragment"
             app:destination="@id/cameraFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_userProfileFragment"
+            app:destination="@id/userProfileFragment" />
     </fragment>
     <fragment
         android:id="@+id/cameraFragment"
@@ -59,11 +63,34 @@
     <fragment
         android:id="@+id/userProfileFragment"
         android:name="com.fortrade.tiktok.profile.UserProfileFragment"
-        android:label="UserProfileFragment" >
+        android:label="UserProfileFragment">
         <argument
             android:name="userNumber"
-            app:argType="string"
-            android:defaultValue="1234567890" />
+            app:argType="string" />
+        <action
+            android:id="@+id/action_userProfileFragment_to_updateProfileFragment"
+            app:destination="@id/updateProfileFragment" />
+        <action
+            android:id="@+id/action_userProfileFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+        <action
+            android:id="@+id/action_userProfileFragment_to_fullscreenImageFragment"
+            app:destination="@id/fullscreenImageFragment" />
+        <action
+            android:id="@+id/action_userProfileFragment_to_clipsFullscreenFragment2"
+            app:destination="@id/clipsFullscreenFragment2" />
     </fragment>
+    <fragment
+        android:id="@+id/fullscreenImageFragment"
+        android:name="com.fortrade.tiktok.profile.FullscreenImageFragment"
+        android:label="FullscreenImageFragment" >
+        <argument
+            android:name="userNumber"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/clipsFullscreenFragment2"
+        android:name="com.fortrade.tiktok.profile.ClipsFullscreenFragment"
+        android:label="ClipsFullscreenFragment" />
 
 </navigation>

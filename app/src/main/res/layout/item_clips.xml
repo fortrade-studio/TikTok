@@ -16,22 +16,38 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        >
 
-        <ImageView
-            android:id="@+id/clips_thumbnail"
-            android:layout_width="96dp"
+        <VideoView
+            android:id="@+id/videoView"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/design_default_color_on_primary"
-            card_view:layout_constraintBottom_toBottomOf="parent"
-            card_view:layout_constraintStart_toStartOf="parent"
-            card_view:layout_constraintTop_toTopOf="parent"
-            android:src="@drawable/ic_clips">
-
-        </ImageView>
-
-
+            android:layout_marginTop="0dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="0dp"
+            android:layout_marginBottom="0dp"
+            android:adjustViewBounds="true"
+            android:scaleType="fitXY"
+            />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+<!--        <ImageView-->
+<!--            android:id="@+id/clips_thumbnail"-->
+<!--            android:layout_width="96dp"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:background="@color/design_default_color_on_primary"-->
+<!--            card_view:layout_constraintBottom_toBottomOf="parent"-->
+<!--            card_view:layout_constraintStart_toStartOf="parent"-->
+<!--            card_view:layout_constraintTop_toTopOf="parent"-->
+<!--            android:src="@drawable/ic_clips">-->
+
+<!--        </ImageView>-->
+
+
+
+<!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
 
 </androidx.cardview.widget.CardView>

@@ -1,0 +1,2 @@
+com/fortradestudio/custom/BuildConfig.java
+ com.fortradestudio.custom.BuildConfig

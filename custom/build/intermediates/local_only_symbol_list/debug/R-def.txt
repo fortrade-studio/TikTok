@@ -1,0 +1,25 @@
+R_DEF: Internal format may change without notice
+local
+attr? exampleColor
+attr? exampleDimension
+attr? exampleDrawable
+attr? exampleString
+color gray_400
+color gray_600
+color light_blue_400
+color light_blue_600
+drawable add_image
+drawable ic_baseline_add_24
+drawable ic_baseline_close_24
+drawable ic_heart_fill_withbg
+drawable ic_no_sound
+drawable ic_remove
+drawable ic_share_fill
+drawable ic_volume_up
+drawable placeholder_add
+drawable plus
+drawable pp
+id auditionContentView
+layout sample
+style Widget.Theme.Audition.MyView
+styleable ProfileImagesViewGroup exampleString exampleDimension exampleColor exampleDrawable
